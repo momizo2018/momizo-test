@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow"><!-- 試験用だけ。本番には入れない -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4f2ed">
+<meta name="format-detection" content="telephone=no">
+<title>揉蔵 | 大田原市のリラクゼーションサロン</title>
+<meta name="description" content="大田原市のリラクゼーションサロン、揉蔵。もみほぐしを中心に、ドライヘッドスパや足つぼも、その日のお身体に合わせて組み合わせます。コースは30分から120分まで。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/site.css">
+<!-- 検索用の店の情報。営業時間は Access の表・今日の営業状況（JS）とあわせて3か所。変えるときは全部直す。
+     24時閉店は "23:59" と書く（構造化データの決まり）。火・水は書かない＝定休日 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "DaySpa",
+  "name": "揉蔵",
+  "alternateName": "relaxation salon momizo",
+  "description": "もみほぐしを中心に、ドライヘッドスパや足つぼも、その日のお身体に合わせて組み合わせるリラクゼーションサロンです。",
+  "url": "https://momizo2018.github.io/momizo-site/",
+  "telephone": "+81-287-33-9178",
+  "priceRange": "¥2,000〜¥9,100",
+  "address": {
+    "@type": "PostalAddress",
+    "postalCode": "324-0041",
+    "addressRegion": "栃木県",
+    "addressLocality": "大田原市",
+    "streetAddress": "本町1丁目2701-11 サイトー・バルコニー107",
+    "addressCountry": "JP"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 36.8768586, "longitude": 140.0067194 },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Thursday"], "opens": "14:00", "closes": "23:59" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "14:00", "closes": "22:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday", "Sunday"], "opens": "10:00", "closes": "22:00" }
+  ],
+  "sameAs": ["https://page.line.me/cvj7583f"]
+}
+</script>
+</head>
+
+<body class="page-top">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cam" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 10h5l2-3h10l2 3h5v15H4z"/><circle cx="16" cy="17" r="4.5"/></g></symbol>
+</svg>
+<div class="card">
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name">momizo</span><span class="brand-sub">Relaxation &amp; Care</span></a>
+    <nav class="nav" aria-label="メインメニュー">
+      <a href="menu/">Menu</a>
+      <a href="#benefit">First Visit</a>
+      <a href="#access">Access</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="kicker">Relaxation salon in Otawara, Tochigi</p>
+      <h1>Unwind,<br>slowly.</h1>
+      <p class="jp-sub">今日のこわばりを、ゆっくり、ほどく。</p>
+      <p class="lead">大田原市のリラクゼーションサロン、揉蔵。<br>もみほぐしを中心に、ドライヘッドスパや足つぼも、その日のお身体に合わせて組み合わせます。</p>
+      <p class="lead">コースは30分から120分まで。仕事帰りにも寄りやすい夜までの営業で、無料の駐車場とキャッシュレス決済もご用意しています。</p>
+      <p class="today" id="today"></p>
+      <div class="cta">
+        <a class="btn" href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">Book online<small>WEB予約</small></a>
+        <a class="btn ghost" href="tel:0287339178">0287-33-9178<small>電話</small></a>
+      </div>
+      <div class="ph hero-ph" role="img" aria-label="仮画像：店内の様子">
+        <div class="ph-label"><svg aria-hidden="true"><use href="#cam"/></svg><b>Photo</b><span>仮画像<br>店内の様子（縦長）</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="sec-head"><h2><span class="en" lang="en">About</span><span class="jp">揉蔵について</span></h2></div>
+      <div class="about">
+        <div class="ph" role="img" aria-label="仮画像：施術の様子">
+          <div class="ph-label"><svg aria-hidden="true"><use href="#cam"/></svg><b>Photo</b><span>仮画像<br>施術の様子（横長）</span></div>
+        </div>
+        <div>
+          <h3 lang="en">A quiet place<br>to let go.</h3>
+          <p>飾りすぎず、ケアそのものに向き合う場所。肩や腰のつらさ、日々の疲れを、時間をかけてほぐします。ほっと一息つける時間を、お過ごしください。</p>
+          <ul class="facts">
+            <li><b lang="en">Open late</b><span>月・木は24時まで</span></li>
+            <li><b lang="en">Same-day</b><span>当日のご予約も可</span></li>
+            <li><b lang="en">Parking</b><span>無料の駐車場あり</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="menu">
+    <div class="wrap">
+      <div class="sec-head"><h2><span class="en" lang="en">Menu</span><span class="jp">コースと料金</span></h2></div>
+      <ul class="mini">
+        <li>
+          <div class="ph" role="img" aria-label="仮画像：ボディコース"><div class="ph-label"><svg aria-hidden="true"><use href="#cam"/></svg><b>Body</b><span>仮画像</span></div></div>
+          <div><span class="name"><span lang="en">Body</span><small>もみほぐし</small></span><span class="care">Dry care</span></div>
+          <div class="from">from<b>2,000</b></div>
+        </li>
+        <li>
+          <div class="ph" role="img" aria-label="仮画像：ヘッドコース"><div class="ph-label"><svg aria-hidden="true"><use href="#cam"/></svg><b>Head</b><span>仮画像</span></div></div>
+          <div><span class="name"><span lang="en">Head</span><small>ドライヘッドスパ</small></span><span class="care">Dry care</span></div>
+          <div class="from">from<b>2,800</b></div>
+        </li>
+        <li>
+          <div class="ph" role="img" aria-label="仮画像：フットコース"><div class="ph-label"><svg aria-hidden="true"><use href="#cam"/></svg><b>Foot</b><span>仮画像</span></div></div>
+          <div><span class="name"><span lang="en">Foot</span><small>足つぼ・リフレクソロジー</small></span><span class="care">Oil care</span></div>
+          <div class="from">from<b>3,000</b></div>
+        </li>
+        <li>
+          <div class="ph" role="img" aria-label="仮画像：フルコース"><div class="ph-label"><svg aria-hidden="true"><use href="#cam"/></svg><b>Full</b><span>仮画像</span></div></div>
+          <div><span class="name"><span lang="en">Full</span><small>3つの組み合わせ</small></span><span class="care">Oil &amp; dry care</span></div>
+          <div class="from">from<b>7,200</b></div>
+        </li>
+      </ul>
+      <p class="note">料金は、すべて税込です。</p>
+      <div class="more"><a class="btn ghost" href="menu/">See the menu<small>コースと料金を見る</small></a></div>
+    </div>
+  </section>
+
+  <section class="band" id="benefit">
+    <div class="wrap">
+      <div class="sec-head"><h2><span class="en" lang="en">First Visit</span><span class="jp">はじめての方へ</span></h2></div>
+      <div class="visit">
+        <div>
+          <h3 lang="en">Coupons<small>クーポン</small></h3>
+          <div class="links">
+            <a class="line" href="https://liff.line.me/1654883387-DxN9w07M/c/01KN2JGMKMGY5EMJJC5RBBR9R1" target="_blank" rel="noopener"><span class="action-copy"><b lang="en">First-visit coupon</b><small>初めてご来店の方なら、どなたでも。</small></span><span class="line-arrow" aria-hidden="true">↗</span></a>
+            <a class="line" href="https://page.line.me/cvj7583f" target="_blank" rel="noopener"><span class="action-copy"><b lang="en">LINE friends coupons</b><small>公式LINEの友だち限定。トークでお届けしています。</small></span><span class="line-arrow" aria-hidden="true">↗</span></a>
+          </div>
+          <p class="note">内容は、リンク先でご確認ください。</p>
+        </div>
+        <div>
+          <h3 lang="en">Stamp card<small>スタンプカード</small></h3>
+          <div class="ph stamp-ph" role="img" aria-label="仮画像：スタンプカード">
+            <div class="ph-label"><svg aria-hidden="true"><use href="#cam"/></svg><b>Stamp card</b><span>仮画像<br>スタンプカードの写真（横長）</span></div>
+          </div>
+          <p class="jp-line">施術30分ごとに、スタンプを1つ。12個たまると、500円OFFになります。</p>
+          <p class="small">ほかの特典とは併用できません。有効期限は、最後のご利用日から1年です。</p>
+          <ul class="notices" id="notices" hidden></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="access">
+    <div class="wrap">
+      <div class="sec-head"><h2><span class="en" lang="en">Access</span><span class="jp">アクセス・営業時間</span></h2></div>
+      <div class="access">
+        <div>
+          <dl class="info">
+            <div><dt lang="en">Address</dt><dd>〒324-0041<br>栃木県大田原市本町1丁目2701-11<br>サイトー・バルコニー107</dd></div>
+            <div><dt lang="en">Landmark</dt><dd>ハローワーク大田原の近く。</dd></div>
+            <div><dt lang="en">By car</dt><dd>矢板IC・西那須野塩原ICから約20分。無料の駐車場があります。</dd></div>
+            <div><dt lang="en">By train</dt><dd>JR西那須野駅から、車で約8分（徒歩では約25分）。</dd></div>
+            <div><dt lang="en">By bus</dt><dd>「一本松」停留所から、徒歩約3分。<br>「本町」停留所から、徒歩約5分。</dd></div>
+            <div><dt lang="en">Payment</dt><dd>現金のほか、次の方法をご利用いただけます。<span class="pay"><b>クレジットカード</b>Visa、Mastercard、JCB、American Express、Diners Club、Discover</span><span class="pay"><b>電子マネー</b>交通系IC、iD、QUICPay</span><span class="pay"><b>QRコード決済</b>PayPay、d払い、楽天ペイ、au PAY など</span></dd></div>
+          </dl>
+          <h3>Hours</h3>
+          <table class="hours">
+            <tr><th>Mon · Thu</th><td>14:00 – 24:00</td></tr>
+            <tr><th>Fri</th><td>14:00 – 22:00</td></tr>
+            <tr><th>Sat · Sun</th><td>10:00 – 22:00</td></tr>
+            <tr><th>Tue · Wed</th><td>Closed<small>定休日（祝日も曜日どおり）</small></td></tr>
+          </table>
+          <p class="note">当日のWEB予約は、閉店の1時間30分前までお受けします。</p>
+        </div>
+        <div>
+          <div class="mapbox">
+            <iframe title="揉蔵の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=36.8768586,140.0067194&amp;z=16&amp;output=embed"></iframe>
+          </div>
+          <a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%8F%89%E8%94%B5+%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%A4%A7%E7%94%B0%E5%8E%9F%E5%B8%82%E6%9C%AC%E7%94%BA1%E4%B8%81%E7%9B%AE2701-11" target="_blank" rel="noopener">Open in Google Maps<small>地図を開く</small></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="careers">
+    <div class="wrap">
+      <div class="sec-head"><h2><span class="en" lang="en">Careers</span><span class="jp">セラピスト募集</span></h2></div>
+      <p class="sec-note">一緒に働いていただけるセラピストを募集しています。</p>
+      <a class="btn ghost" href="recruit/">Join our team<small>募集要項を見る</small></a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-body">
+    <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name">momizo</span><span class="brand-sub">Relaxation &amp; Care</span></a>
+    <p class="foot-addr">〒324-0041 栃木県大田原市本町1丁目2701-11 サイトー・バルコニー107</p>
+    <div class="foot-links">
+      <a class="line" href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start"><span class="action-copy"><b lang="en">Book online</b><small>WEB予約</small></span></a>
+      <a class="line" href="tel:0287339178"><span class="action-copy"><b lang="en">Call</b><small>0287-33-9178</small></span></a>
+      <a class="line" href="https://page.line.me/cvj7583f" target="_blank" rel="noopener"><span class="action-copy"><b lang="en">LINE</b><small>公式LINE</small></span></a>
+      <a class="line" href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener"><span class="action-copy"><b lang="en">Review</b><small>口コミを書く</small></span></a>
+    </div>
+    <p class="foot-note">WEB予約は24時間、当日のご予約も承ります。公式LINEは配信専用のため、ご予約はWEBかお電話でどうぞ。</p>
+    <nav class="foot-nav" aria-label="サイト内のページ">
+      <a href="menu/" lang="en">Menu</a><a href="#benefit" lang="en">First Visit</a><a href="#access" lang="en">Access</a><a href="recruit/" lang="en">Careers</a>
+    </nav>
+    <p class="footer">&copy; 2026 relaxation salon momizo</p>
+  </div>
+</footer>
+</div>
+
+<!-- =========================================================
+     運営用の設定（今は、このファイルの中で管理。のちにスプレッドシートから読み込む形へ置き換える想定）
+     ・until は「この日まで表示」（日本時間・その日の終わりまで）。過ぎると自動で消えます。
+     ・告知がなくなれば、告知の欄ごと表示されません。
+     ・本文には、期間限定の内容を書かないこと。
+     ========================================================= -->
+<script>
+window.SITE_NOTICES = [
+  { until: "2026-12-31",
+    en: "Double stamps, Mon – Fri.",
+    ja: "年内は、月曜から金曜のご利用でスタンプが2倍になります（祝日も対象です）。" }
+];
+</script>
+<script>
+/* 日本時間の「いま」 */
+const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+
+/* 本日の営業状況 */
+(() => {
+  const H = { 0:[10,22], 1:[14,24], 2:null, 3:null, 4:[14,24], 5:[14,22], 6:[10,22] };
+  const el = document.getElementById("today");
+  try {
+    const jp = jstNow();
+    const h = H[jp.getDay()];
+    const now = jp.getHours() + jp.getMinutes() / 60;
+    const pad = (n) => String(n).padStart(2, "0") + ":00";
+    if (!h) { el.innerHTML = "Closed today <small>本日は定休日です</small>"; }
+    else {
+      const open = now >= h[0] && now < h[1];
+      el.innerHTML = (open ? "Open now" : "Today") + " &nbsp;" + pad(h[0]) + " – " + pad(h[1]) + " <small>" + (open ? "営業中" : "本日の営業時間") + "</small>";
+      if (open) el.classList.add("open");
+    }
+    el.classList.add("on");
+  } catch (e) {}
+})();
+
+/* 期間限定の告知（SITE_NOTICES から。期限が過ぎたものは出さない） */
+(() => {
+  const ul = document.getElementById("notices");
+  const today = jstNow(); today.setHours(0, 0, 0, 0);
+  const alive = (window.SITE_NOTICES || []).filter((n) => {
+    const end = new Date(n.until + "T00:00:00");
+    return !isNaN(end) && today <= end;
+  });
+  alive.forEach((n) => {
+    const li = document.createElement("li");
+    const b = document.createElement("b"); b.lang = "en"; b.textContent = n.en || "Notice";
+    const s = document.createElement("span"); s.textContent = n.ja || "";
+    li.append(b, s); ul.append(li);
+  });
+  ul.hidden = alive.length === 0;
+})();
+</script>
+</body>
+</html>
