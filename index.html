@@ -28,9 +28,9 @@
 
    規則
    1. 間隔は 4・8・12・16・24・32・48・64・96。関係が近いものほど狭く、となりの役割とは1段以上の差をつける
-   2. 文字は 12・14・20。太さは 400 が基本。600 は小見出し・ボタンだけ
+   2. 文字は 12・14・20（例外：ヘッダーのロゴ 28、求人の「65%」64）。太さは 400 が基本。600 は小見出し・ボタンだけ
       行間は 1・1.4・1.8。字間は基本 .04em
-   3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）、コース名と from、メニューの Staff Request、著作権表示だけ
+   3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）と著作権表示だけ
    4. 写真と地図の縦横比は 4:5 と 3:2 の2つだけ
    5. 画面幅で値が変わるのは 480px 以下の1か所だけ
    ========================================================= */
@@ -51,12 +51,12 @@
   --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
 
   /* 小さな間隔（役割で選ぶ） */
-  --gap-tight: var(--sp-1);     /*  4 コース名の英語→日本語 */
-  --gap-item: var(--sp-2);      /*  8 from→料金、営業状況の点→文字 */
+  --gap-tight: var(--sp-1);     /*  4 コース名→その下の施術名 */
+  --gap-item: var(--sp-2);      /*  8 営業状況の点→文字、ナビ・ページの行の項目どうしの最小、特徴の札どうし */
   --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
-  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、区切り線→ナビ */
-  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン */
-  --gap-section: var(--sp-8);   /* 32 本文→お知らせ、セクション見出し→中身、写真→小見出し、区切り線の前後 */
+  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
+  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
+  --gap-section: var(--sp-8);   /* 32 本文→お知らせ、セクション見出し→中身、写真→小見出し、フッターの上の区切り線→ロゴ */
 
   /* 横の位置（幅480px以下で変わる） */
   --page-pad: var(--sp-4);
@@ -78,9 +78,10 @@
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
   --font-latin: "Inter", sans-serif;
   --fw-regular: 400; --fw-semibold: 600;
-  --fs-sm: 12px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コース名の日本語、from */
+  --fs-sm: 12px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
   --fs-md: 14px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
-  --fs-lg: 20px;     /* ロゴ、セクション見出し、コース名、料金 */
+  --fs-lg: 20px;     /* フッターのロゴ、セクション見出し、コース名、料金 */
+  --fs-logo: 28px;   /* 固有値：ヘッダーのロゴ。下のリンクの行に埋もれないよう、ここだけ大きく */
   --lh-none: 1;      /* 1行の部品 */
   --lh-ui: 1.4;      /* 見出し、ボタン */
   --lh-text: 1.8;    /* 文章 */
@@ -99,7 +100,7 @@
     linear-gradient(145deg, var(--paper-hi) 0%, var(--paper-lo) 100%);
 
   /* ================= 層2 ページの共通値（トップページ） ================= */
-  --page-group: var(--sp-16);     /* 64 ヘッダー→最初の内容、セクションの中の大きなまとまりどうし、帯の上下の内側 */
+  --page-group: var(--sp-16);     /* 64 ナビ→最初の内容、セクションの中の大きなまとまりどうし、帯の上下の内側 */
   --page-section: var(--sp-24);   /* 96 セクションどうし、最後の内容→フッター */
 
   color-scheme: light;
@@ -138,11 +139,15 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)) scale(.99); } to { opacity: 1; transform: none; } }
 
 /* ---------- ヘッダー：ロゴ（左）と営業状況（右）を1行に、区切り線、その下にナビ ---------- */
-.head .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-head); padding-bottom: var(--gap-section); border-bottom: var(--bw) solid var(--ink-12); }
+.head .wrap { display: flex; align-items: flex-end; align-items: last baseline; justify-content: space-between; gap: var(--gap-head); }   /* 営業状況はロゴの下の行（relaxation salon）の文字の下の線にそろえる */
+/* ページの行：ロゴの下に、フッターと同じ並び。ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
+.head .brand { font-size: var(--fs-logo); }
+.head-pages { margin-top: var(--sp-12); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 /* ロゴ：コース名と同じ書き方。英字の名前（20px・400・-.04em・ink-2）の下に、小さな英字（12px・soft）。間0 */
-.brand { display: grid; color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { font-size: var(--fs-lg); line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
-.brand-sub { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
+.brand { display: grid; font-size: var(--fs-lg); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { font-size: 1em; line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
+/* ロゴは1つの塊として大きさを変える。relaxation salon は momizo の0.6倍（フッター20→12、ヘッダー28→16.8） */
+.brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 /* 営業状況：点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft） */
 .status { display: none; align-items: baseline; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
 .status.on { display: flex; }
@@ -150,17 +155,21 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
 .status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
 
-/* ナビとフッターのリンク：左右の端までそろえて1行に。ヘッダーのナビは、そのページの見出しを上から順に（ページ内へ飛ぶ）。
-   フッターは2段：1段目はページ（トップ → コースと料金 → セラピスト募集）、2段目は外部（WEB予約 → 電話 → 公式LINE → 口コミを書く） */
-.nav, .foot-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-item); }
+/* ナビとリンクの行：左右の端までそろえて1行に。
+   ヘッダー：ロゴ → ページの行 → 区切り線 → そのページの目次（見出しを上から順に。ページ内へ飛ぶ）
+   フッター：ロゴ → ページの行 → 区切り線 → 外部（WEB予約 → 電話 → 公式LINE → 口コミを書く）
+   ページの行はヘッダーとフッターで同じ（トップ → コースと料金 → セラピスト募集。今いるページは薄くして、リンクにしない） */
+.nav, .link-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-item); }
 .nav { margin-top: var(--gap-head); }
-.nav a, .foot-nav a, .foot-nav span { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
-.foot-nav [aria-current] { color: var(--faint); }   /* 今いるページは薄くして、リンクにしない */
-@media (hover: hover) { .brand:hover { opacity: .6; } .nav a:hover, .foot-nav a:hover { color: var(--ink-2); } }
+.nav a, .link-row a, .link-row span { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
+.link-row [aria-current] { color: var(--faint); }   /* 今いるページは薄くして、リンクにしない */
+@media (hover: hover) { .brand:hover { opacity: .6; } .nav a:hover, .link-row a:hover { color: var(--ink-2); } }
 
 /* ---------- 写真の枠（画像がないときは仮画像の面） ---------- */
-.ph { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--paper-hi) 0%, var(--accent-16) 100%); border-radius: var(--r-md); }
-.ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* 写真は角丸の枠に入れず、カードの端から端まで広げる（はじめての方への帯と同じ広げ方）。
+   色味は、地図と同じ考えで少しだけ落ち着かせ、写真どうしのトーンをそろえる */
+.ph { position: relative; overflow: hidden; margin-inline: calc(var(--card-pad-x) * -1); background: linear-gradient(160deg, var(--paper-hi) 0%, var(--accent-16) 100%); }
+.ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.82) sepia(.08) brightness(1.02) contrast(.96); }
 
 /* ---------- ボタン：カード内では幅いっぱい ---------- */
 .btn {
@@ -222,17 +231,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .facts { list-style: none; margin-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
 .facts li { padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
 
-/* ---------- コース一覧：左に名前（英語の下に日本語）、右に from ¥料金。線の行の上下は表と同じ16 ---------- */
-.mini { list-style: none; border-top: var(--bw) solid var(--ink-12); }
-/* 単位：表の右上に1か所だけ「税込・円」（総額表示）。料金の数字には「¥」も「税込」も付けない */
-.unit { margin-top: var(--gap-section); margin-bottom: var(--gap-item); text-align: right; font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
-.unit + .mini, .unit + .prices { margin-top: 0; }
-h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ */
-.mini li { display: grid; grid-template-columns: 1fr auto; gap: 0 var(--gap-head); align-items: center; padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
-.mini .name { display: grid; gap: var(--gap-tight); font-size: var(--fs-lg); line-height: var(--lh-ui); letter-spacing: var(--ls-latin); }
-.mini .name small { font-size: var(--fs-sm); font-weight: var(--fw-regular); letter-spacing: var(--ls-base); color: var(--soft); }
-.mini .from { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
-.mini .from b { margin-left: var(--gap-item); font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); letter-spacing: var(--ls-latin); font-variant-numeric: tabular-nums; color: var(--ink-2); }
 .info + .note { margin-top: var(--gap-head); }
 
 /* ---------- はじめての方へ（帯）：カードの端から端まで。中身の左端はほかと同じ ---------- */
@@ -306,8 +304,8 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
 @media (hover: hover) { .dock a:hover { opacity: .6; } }
 
 .foot-body { padding-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
-.foot-pages { margin-top: var(--gap-section); }
-.foot-ext { margin-top: var(--gap-section); }   /* 段どうしは32（押せる範囲の上下16が重ならないように） */
+.foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
+.foot-ext { margin-top: var(--gap-head); }   /* 線の上下16。押せる範囲は線のところで接する */
 .footer { margin-top: var(--gap-section); font-family: var(--font-latin); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @keyframes rise { from { opacity: 0; translate: 0 var(--enter-y); } to { opacity: 1; translate: 0 0; } }
@@ -351,8 +349,11 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
     <p class="status" id="status"></p>
   </div>
+  <nav class="link-row head-pages" aria-label="ページ">
+    <span aria-current="page">トップ</span><a href="menu/">コースと料金</a><a href="recruit/">セラピスト募集</a>
+  </nav>
   <nav class="nav" aria-label="このページの目次">
-    <a href="#menu">コースと料金</a><a href="#benefit">はじめての方へ</a><a href="#hours">営業時間</a><a href="#access">アクセス</a>
+    <a href="#benefit">はじめての方へ</a><a href="#hours">営業時間</a><a href="#access">アクセス</a>
   </nav>
 </header>
 
@@ -382,21 +383,8 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
           <li>当日のご予約も受付</li>
           <li>無料駐車場あり</li>
         </ul>
+        <div class="more"><a class="btn ghost" href="menu/">コースと料金を見る</a></div>
       </div>
-    </div>
-  </section>
-
-  <section class="sec" id="menu">
-    <div class="wrap">
-      <h2>コースと料金</h2>
-      <p class="unit">税込・円</p>
-      <ul class="mini">
-        <li><span class="name" lang="en">Body<small lang="ja">もみほぐし</small></span><span class="from" lang="en">from<b>2,000</b></span></li>
-        <li><span class="name" lang="en">Head<small lang="ja">ドライヘッドスパ</small></span><span class="from" lang="en">from<b>2,800</b></span></li>
-        <li><span class="name" lang="en">Foot<small lang="ja">足つぼ・リフレクソロジー</small></span><span class="from" lang="en">from<b>3,000</b></span></li>
-        <li><span class="name" lang="en">Full<small lang="ja">3つの組み合わせ</small></span><span class="from" lang="en">from<b>7,200</b></span></li>
-      </ul>
-      <div class="more"><a class="btn ghost" href="menu/">コースと料金を見る</a></div>
     </div>
   </section>
 
@@ -467,10 +455,10 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
 <footer class="site-foot">
   <div class="foot-body">
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
-    <nav class="foot-nav foot-pages" aria-label="ページ">
+    <nav class="link-row foot-pages" aria-label="ページ">
       <span aria-current="page">トップ</span><a href="menu/">コースと料金</a><a href="recruit/">セラピスト募集</a>
     </nav>
-    <nav class="foot-nav foot-ext" aria-label="予約と連絡">
+    <nav class="link-row foot-ext" aria-label="予約と連絡">
       <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEB予約</a><a href="tel:0287339178">電話</a><a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a><a href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener">口コミを書く</a>
     </nav>
     <p class="footer" lang="en">&copy; 2026 relaxation salon momizo</p>
