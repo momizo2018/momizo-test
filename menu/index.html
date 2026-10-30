@@ -118,11 +118,7 @@ body {
 }
 /* 日本語は文節で折り返す。見出しは行の長さをそろえる。固有名詞と数字のまとまりは .nb で途中で切らない */
 .nb { white-space: nowrap; }
-/* 日本語の折り返し：文節で。対応するブラウザ（Chrome など）は auto-phrase。
-   対応しないブラウザ（iPhone の Safari など）は keep-all にして、下のスクリプトが入れる <wbr> の位置だけで折り返す。
-   長すぎて入りきらないときだけ、どこでも折り返す（break-word） */
-body { word-break: keep-all; overflow-wrap: break-word; }
-@supports (word-break: auto-phrase) { body { word-break: auto-phrase; } }
+h1, h2, h3, p, dd, li, small { word-break: auto-phrase; }
 p, dd, li, small { text-wrap: pretty; }
 h1, h2, h3 { text-wrap: balance; font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
 main p { color: var(--muted); }
@@ -385,65 +381,6 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
   addEventListener("scroll", onScroll, { passive: true });
   addEventListener("resize", onScroll);
   update();
-})();
-</script>
-<script>
-/* 文節で折り返す（word-break: auto-phrase に対応していないブラウザ用。主に iPhone の Safari）
-   日本語の文章に、折り返してよい位置だけ <wbr> を入れる。CSS の keep-all で、それ以外の位置では折り返さない。
-   折り返してよい位置：
-   ・「、」「。」「：」「）」などの後
-   ・ひらがなの後に、漢字・カタカナ・英数字・「（」などが続くところ（例：大田原市の|リラクゼーションサロン）
-     ただし「お」「ご」の後の漢字は続ける（ご|予約 にしない）
-   ・カタカナ語の後の「（」の前
-   漢字の後の「（」の前と、「・」の後では折り返さない（揉蔵|（もみぞう）、足つぼ・|リフレクソロジー にしない）
-   あとから入る文字（お知らせ・営業状況・入力のエラーなど）も、見つけしだい同じように区切る */
-(() => {
-  if (window.CSS && CSS.supports("word-break", "auto-phrase")) return;
-  const HIRA = /[\u3041-\u309f]/, KANJI = /[\u3400-\u4dbf\u4e00-\u9fff々〆]/;
-  const KATA = /[\u30a1-\u30fa\u30fc-\u30ff\u31f0-\u31ff]/, ALNUM = /[A-Za-z0-9０-９Ａ-Ｚａ-ｚ]/;
-  const OPEN = /[（「『【〈《［｛(]/, CLOSE = /[、。，．！？：）」』】〉》］｝]/;
-  const can = (a, b) => {
-    if (CLOSE.test(a)) return !CLOSE.test(b) && b !== " ";
-    if (HIRA.test(a)) {
-      if ((a === "お" || a === "ご") && KANJI.test(b)) return false;
-      return KANJI.test(b) || KATA.test(b) || ALNUM.test(b) || OPEN.test(b);
-    }
-    if (KATA.test(a) && OPEN.test(b)) return true;   // カタカナ語の後の「（」は区切ってよい（リフレクソロジー|（オイル使用））
-    return false;
-  };
-  const SKIP = "script,style,textarea,select,option,title,.nb,[lang='en'],[data-nowrap]";
-  const split = (node) => {
-    const t = node.nodeValue;
-    if (!t || !/[\u3041-\u30ff\u3400-\u9fff]/.test(t)) return;
-    const p = node.parentElement;
-    if (!p || p.closest(SKIP)) return;
-    // 区切らない位置のうち、keep-all でも折り返されてしまう「（」の前と「・」の後には、見えない「つなぎ」（U+2060）を入れる
-    const parts = []; let from = 0, cur = t[0], glued = false;
-    for (let i = 1; i < t.length; i++) {
-      if (can(t[i - 1], t[i])) { parts.push(cur); cur = ""; }
-      else if ((OPEN.test(t[i]) && KANJI.test(t[i - 1])) || t[i - 1] === "・") { cur += "\u2060"; glued = true; }
-      cur += t[i];
-    }
-    if (!parts.length && !glued) return;
-    parts.push(cur);
-    const frag = document.createDocumentFragment();
-    parts.forEach((s, i) => { if (i) frag.append(document.createElement("wbr")); frag.append(s); });
-    node.replaceWith(frag);
-  };
-  const walk = (root) => {
-    if (root.nodeType === 3) return split(root);
-    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const list = []; while (w.nextNode()) list.push(w.currentNode);
-    list.forEach(split);
-  };
-  const mo = new MutationObserver((recs) => {
-    mo.disconnect();
-    recs.forEach((r) => r.type === "characterData" ? split(r.target) : r.addedNodes.forEach(walk));
-    watch();
-  });
-  const watch = () => mo.observe(document.body, { childList: true, subtree: true, characterData: true });
-  walk(document.body);
-  watch();
 })();
 </script>
 </body>
