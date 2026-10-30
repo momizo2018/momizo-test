@@ -262,6 +262,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   --page-section: var(--sp-24);   /* 96 セクションどうし、最後の内容→フッター */
   --err: #b3261e;                 /* 入力の誤り（求人ページのフォームだけ） */
   --fs-display: 64px;             /* 固有値：「65%」の数字。ページで一番伝えたい数字なので、ここだけ大きく */
+  --fs-input: 16px;               /* 固有値：フォームの入力欄の文字。16px未満だと、iPhone で欄をタップしたときに画面が拡大されるため */
 }
 
 /* ---------- ページの題：h1 →32→ 本文 →24→ 特徴の札 →32→「65%」の箱 ---------- */
@@ -330,10 +331,10 @@ main .f-err { font-size: var(--fs-sm); color: var(--err); }   /* 項目ごとの
 .sub > span { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 main .age { font-size: var(--fs-sm); color: var(--muted); }
 .age b { font-size: var(--fs-md); font-weight: var(--fw-regular); color: var(--ink-2); }
-/* 入力欄：14px、white-80、縁 ink-12、角丸16、内側 上下12・左右16 */
+/* 入力欄：16px（固有値）、white-80、縁 ink-12、角丸16、内側 上下12・左右16 */
 .form input[type=text], .form input[type=tel], .form input[type=email], .form select, .form textarea {
   width: 100%; padding: var(--gap-list) var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-80);
-  color: var(--ink-2); font: inherit; font-size: var(--fs-md); line-height: var(--lh-ui); letter-spacing: inherit;
+  color: var(--ink-2); font: inherit; font-size: var(--fs-input); line-height: var(--lh-ui); letter-spacing: inherit;
   -webkit-appearance: none; appearance: none; transition: border-color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
 }
 /* セレクトの▼（8px・soft）。▼の左右にも、文字の左と同じ余白 */
@@ -343,7 +344,8 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
   padding-right: calc(var(--pad-x) * 2 + var(--sp-2));
   background-position: calc(100% - var(--pad-x) - var(--sp-1)) 50%, calc(100% - var(--pad-x)) 50%; background-size: var(--sp-1) var(--sp-1); background-repeat: no-repeat;
 }
-.form textarea { min-height: var(--sp-24); resize: vertical; }   /* 記入欄：最小96、縦にだけ伸ばせる */
+/* 記入欄：どれも同じ5行分の高さ（固有値）。縦にだけ伸ばせる。いちばん長い記入例（ご経験の4行）が、余白1行を残して収まる */
+.form textarea { min-height: calc(var(--fs-input) * var(--lh-ui) * 5 + var(--gap-list) * 2 + var(--bw) * 2); resize: vertical; }
 .form ::placeholder { color: var(--faint); opacity: 1; }
 .form input:focus, .form select:focus, .form textarea:focus { border-color: var(--accent); background: var(--white); outline: none; }
 .form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
@@ -362,7 +364,7 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
 .day-check { display: flex; align-items: center; gap: var(--gap-item); cursor: pointer; }
 .day-check input, .chk input { flex: 0 0 var(--sp-4); width: var(--sp-4); height: var(--sp-4); accent-color: var(--accent); }
 .day .to { color: var(--soft); }
-.form .day select { --pad-x: var(--gap-list); }
+.form .day select { --pad-x: var(--gap-item); }   /* 曜日の行は2つ並ぶので、左右と▼の余白を8に。320px幅でも「00:00」が収まる */
 .form .day select:disabled { opacity: .4; cursor: default; }
 /* 同意・送信（送信は .btn） */
 .chk { display: flex; align-items: flex-start; gap: var(--gap-list); padding: var(--gap-list) var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); line-height: var(--lh-ui); cursor: pointer; }
@@ -603,7 +605,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 
         <div class="f">
           <label for="f-exp">施術に関わるお仕事のご経験<span class="req">必須</span></label>
-          <textarea id="f-exp" name="exp" maxlength="300" placeholder="例）○○整体院　2年（もみほぐし）&#10;△△リラクゼーション　1年（ヘッドスパ・足つぼ）" required></textarea>
+          <textarea id="f-exp" name="exp" maxlength="300" placeholder="例）2020年1月～2023年12月&#10;○○整体院 3年（マッサージ）&#10;2025年6月～2026年7月&#10;△△リラク 1年（もみほぐし）" required></textarea>
           <p class="hint">店舗名・年数・施術内容をご記入ください<span data-maxlen="f-exp"></span>。施術に関わらない経歴は、書かなくてかまいません。</p>
         </div>
 
