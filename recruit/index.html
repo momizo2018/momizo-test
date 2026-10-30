@@ -317,12 +317,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .form { display: grid; gap: var(--gap-block); }
 .f { display: grid; gap: var(--gap-item); min-width: 0; border: 0; }
 .f > legend { margin-bottom: var(--gap-item); }   /* legend は並びの外なので、間隔を自分で持つ */
-.f > label:not(.sub), .f > legend { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-semibold); line-height: var(--lh-ui); }   /* 項目名は小見出しと同じ14px・600 */
+.f > label:not(.sub, .chk), .f > legend { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-semibold); line-height: var(--lh-ui); }   /* 項目名は小見出しと同じ14px・600 */
 .req, .opt { font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); }   /* 必須・任意は札にせず、12pxの文字だけ */
 .req { color: var(--accent-hover); }
 .opt { color: var(--soft); }
 main .hint, main .err { font-size: var(--fs-sm); color: var(--soft); }
 main .err { color: var(--err); }
+main .f-err { font-size: var(--fs-sm); color: var(--err); }   /* 項目ごとの誤り：その欄のすぐ下に、12px・err */
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-item); }
 .sub { display: grid; gap: var(--gap-tight); min-width: 0; }
 .hint + .sub { margin-top: var(--gap-item); }   /* 項目の中の2つ目のまとまり：前とあわせて16あく */
@@ -638,7 +639,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
 
         <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
-        <label class="chk"><input type="checkbox" id="f-agree" required><span>ご入力いただいた情報を、選考のためだけに使うことに同意します。<span class="req">必須</span></span></label>
+        <div class="f"><label class="chk"><input type="checkbox" id="f-agree" required><span>ご入力いただいた情報を、選考のためだけに使うことに同意します。<span class="req">必須</span></span></label></div>
 
         <div>
           <button type="submit" class="btn send">送信する</button>
@@ -946,37 +947,91 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
     return { text: text.join("\n") };
   }
 
-  /* ---------- 送信前のチェック ---------- */
-  // 問題があればメッセージを出してその欄へ移動し、false を返す
-  function validate() {
+  /* ---------- 送信前のチェック ----------
+     ・誤りはすべて集め、フォームの上から順に、それぞれの欄のすぐ下に出す（何が違うのかを、その場で示す）
+     ・送信ボタンの下には、件数だけをまとめて出す
+     ・いちばん上の誤りの欄へ移動する。スマホ（指で操作）では欄にフォーカスしない。
+       入力欄は14pxのため、フォーカスするとキーボードと拡大が同時に起き、画面が大きく跳ぶので
+     ・一度送信したあとは、直したそばから誤りの文を消す */
+  const motion = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  const finePointer = matchMedia("(pointer: fine)");
+
+  // 誤りの文を出す場所：「電話番号」「郵便番号」などの小さなまとまりはその下、ほかは項目の最後
+  const slotOf = (el) => (!el.closest(".row2") && el.closest("label.sub")) || el.closest(".f");
+  // 項目名：小さなまとまりの名前か、項目名（「必須」「任意」は除く）
+  const nameOf = (el) => {
+    const sub = !el.closest(".row2") && el.closest("label.sub");
+    if (sub) return sub.querySelector("span").textContent;
+    const head = el.closest(".f").querySelector(":scope > legend, :scope > label");
+    return head ? head.firstChild.textContent.trim() : "";
+  };
+  function messageOf(el) {
+    if (el.type === "radio") return "それぞれ「できる」「できない」をお選びください。";
+    if (el.type === "checkbox") return "同意のチェックが必要です。";
+    if (!el.value.trim()) return nameOf(el) + "をご入力ください。";
+    if ([tel, birth, zip].includes(el)) return el.validationMessage;
+    if (el.validity.typeMismatch) return nameOf(el) + "を正しくご入力ください。";
+    return nameOf(el) + "をご確認ください。";
+  }
+
+  // いまの誤りを、フォームの上から順に [{slot, el, text}] で返す（1か所につき1つ）
+  function collectErrors() {
     checkTel();
     updateAge();
     TRIM_REQUIRED.forEach((n) => {
       const el = field(n);
       el.setCustomValidity(el.value.trim() ? "" : "ご入力ください");
     });
-
-    if (!form.checkValidity()) {
-      const bad = form.querySelector("input:invalid,textarea:invalid,select:invalid");
-      const ownMsg = bad.validationMessage && bad.willValidate && [tel, birth, zip].includes(bad);
-      msg.textContent = ownMsg ? bad.validationMessage : "未入力または入力内容に誤りのある項目があります。ご確認ください。";
-      bad.focus();
-      bad.scrollIntoView({ block: "center", behavior: "smooth" });
-      return null;
-    }
+    const found = new Map();
+    const add = (el, text) => { const slot = slotOf(el); if (!found.has(slot)) found.set(slot, { slot, el, text }); };
+    form.querySelectorAll("input, textarea, select").forEach((el) => {
+      if (el.willValidate && !el.validity.valid) add(el, messageOf(el));
+    });
     if (!form.querySelector('input[name^="skill_"][value="できる"]:checked')) {
-      msg.textContent = "対応できる施術は、「できる」を1つ以上お選びください。";
-      field("skill_body")[0].focus();
-      return null;
+      add(field("skill_body")[0], "「できる」を1つ以上お選びください。");
     }
     const sch = checkSchedule();
-    if (sch.msg) {
-      msg.textContent = sch.msg;
-      sch.el.focus();
-      return null;
-    }
-    return sch;
+    if (sch.msg) add(sch.el, sch.msg);
+    const list = [...found.values()].sort((x, y) =>
+      x.slot.compareDocumentPosition(y.slot) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+    return { list, sch };
   }
+
+  // 誤りの文を出し直す。onlyShown のときは、いま出ている欄だけを更新する（入力中に新しい誤りを出さない）
+  let shownSlots = new Set();
+  function showErrors(list, onlyShown) {
+    if (onlyShown) list = list.filter((x) => shownSlots.has(x.slot));
+    form.querySelectorAll(".f-err").forEach((p) => p.remove());
+    form.querySelectorAll("[aria-invalid]").forEach((el) => { el.removeAttribute("aria-invalid"); el.removeAttribute("aria-describedby"); });
+    list.forEach((x, i) => {
+      const p = document.createElement("p");
+      p.className = "f-err";
+      p.id = "f-err-" + i;
+      p.textContent = x.text;
+      if (x.slot.matches(".f")) x.slot.append(p); else x.slot.after(p);
+      x.el.setAttribute("aria-invalid", "true");
+      x.el.setAttribute("aria-describedby", p.id);
+    });
+    shownSlots = new Set(list.map((x) => x.slot));
+    msg.textContent = !list.length ? "" : list.length === 1 ? "入力内容に確認が必要な項目があります。"
+      : "入力内容に確認が必要な項目が" + list.length + "か所あります。";
+  }
+
+  // 送信時：問題があれば誤りを出していちばん上の欄へ移動し、null を返す
+  function validate() {
+    const { list, sch } = collectErrors();
+    showErrors(list, false);
+    if (!list.length) return sch;
+    const first = list[0];
+    first.slot.scrollIntoView({ block: "center", behavior: motion() });
+    if (finePointer.matches) first.el.focus({ preventScroll: true });
+    return null;
+  }
+
+  // 一度誤りを出したあとは、直したそばから消す
+  const recheck = () => { if (shownSlots.size) showErrors(collectErrors().list, true); };
+  form.addEventListener("input", recheck);
+  form.addEventListener("change", recheck);
 
   /* ---------- 送信データ（キー名は Apps Script の FIELDS と対応） ---------- */
   function buildData(sch) {
