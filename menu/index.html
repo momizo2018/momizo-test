@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4f2ed">
+<meta name="format-detection" content="telephone=no">
+<title>コースと料金 | 揉蔵</title>
+<meta name="description" content="揉蔵（もみぞう）のコースと料金です。もみほぐし、ドライヘッドスパ、足つぼ・リフレクソロジーの3つの施術を、単独や組み合わせでご用意しています。時間は30分から120分までで、選べる時間はコースによって異なります。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="icon" href="../assets/icon/icon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/icon/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/icon/apple-touch-icon.png">
+<style>
+/* =========================================================
+   揉蔵サイト コースと料金のページ専用のスタイル（第11版。トップページと同じ値で組む）
+   - 値は「揉蔵サイト デザイン規格書」のものだけを使う。ほかのページには影響しない
+   - 画像は assets/img/ に置き、枠（.ph）の中に <img> を入れる。横幅960pxの WebP
+
+   値の層
+   層1 全体の共通値 … 色・文字・小さな間隔・角丸・部品の大きさ。全ページ同じ
+   層2 ページの共通値 … 大きな間隔（64と96の2つ）。ページごとに1組
+   層3 固有値 ……… 段階の外にある値。規格書の固有値の章に記載（変更禁止）
+
+   規則
+   1. 間隔は 4・8・12・16・24・32・48・64・96。関係が近いものほど狭く、となりの役割とは1段以上の差をつける
+   2. 文字は 12・14・20。太さは 400 が基本。600 は小見出し・ボタンだけ
+      行間は 1・1.4・1.8。字間は基本 .04em
+   3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）、コース名と from、メニューの Staff Request、著作権表示だけ
+   4. 写真と地図の縦横比は 4:5 と 3:2 の2つだけ
+   5. 画面幅で値が変わるのは 480px 以下の1か所だけ
+   ========================================================= */
+:root {
+  /* ===== 色 ===== */
+  --ink-2: #3b3834; --muted: #6b6761; --soft: #9c978f; --faint: #c0bcb6;
+  --accent: #a28d73; --accent-hover: #8f7b63;
+  --paper: #f4f2ed; --paper-hi: #faf9f6; --paper-lo: #eeece7;
+  --card: rgba(255,254,251,.9);
+  --white: #fff; --white-50: rgba(255,255,255,.5); --white-80: rgba(255,255,255,.8);
+  --ink-12: rgba(23,23,22,.12); --ink-20: rgba(23,23,22,.2);
+  --accent-08: rgba(162,141,115,.08); --accent-16: rgba(162,141,115,.16);
+  --shade-04: rgba(40,34,27,.04); --shade-08: rgba(40,34,27,.08);
+
+  /* ================= 層1 全体の共通値 ================= */
+  /* 間隔の段階 */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px;
+  --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
+
+  /* 小さな間隔（役割で選ぶ） */
+  --gap-tight: var(--sp-1);     /*  4 コース名の英語→日本語 */
+  --gap-item: var(--sp-2);      /*  8 from→料金、営業状況の点→文字 */
+  --gap-list: var(--sp-3);      /* 12 段落どうし、並んだボタンどうし、ボタン→注意書き */
+  --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、区切り線→ナビ */
+  --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン */
+  --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、区切り線の前後 */
+
+  /* 横の位置（幅480px以下で変わる） */
+  --page-pad: var(--sp-4);
+  --card-w: 480px;              /* 固有値 */
+  --card-pad-x: var(--sp-8);
+  --card-pad-y: var(--sp-12);
+
+  /* 部品の大きさ */
+  --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ（固有値） */
+  --label-col: var(--sp-16);    /* 64 表の項目欄の幅（固有値） */
+  --arrow: var(--sp-8);         /* 32 矢印の丸 */
+
+  /* 線・角丸・影 */
+  --bw: 1px; --focus-w: 2px;
+  --r-md: 16px; --r-xl: 24px; --r-pill: 999px;
+  --shadow-card: 0 var(--sp-6) var(--sp-16) var(--shade-08), 0 2px var(--sp-3) var(--shade-04);
+
+  /* 文字 */
+  --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-latin: "Inter", sans-serif;
+  --fw-regular: 400; --fw-semibold: 600;
+  --fs-sm: 12px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コース名の日本語、from */
+  --fs-md: 14px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
+  --fs-lg: 20px;     /* ロゴ、セクション見出し、コース名、料金 */
+  --lh-none: 1;      /* 1行の部品 */
+  --lh-ui: 1.4;      /* 見出し、ボタン */
+  --lh-text: 1.8;    /* 文章 */
+  --ls-latin: -.04em; --ls-base: .04em;
+
+  /* 動き */
+  --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --lift: -2px; --press: .97; --enter-y: var(--sp-4);
+  --dock-delay: .6s;   /* 画面下のメニューが出てくるまでの間（カードの現れ .8s に少し重ねる） */
+
+  /* 背景 */
+  --bg-page:
+    radial-gradient(circle at 8% 8%, var(--white), transparent 32%),
+    radial-gradient(circle at 92% 92%, var(--accent-16), transparent 32%),
+    linear-gradient(145deg, var(--paper-hi) 0%, var(--paper-lo) 100%);
+
+  /* ================= 層2 ページの共通値（トップページ） ================= */
+  --page-group: var(--sp-16);     /* 64 ヘッダー→最初の内容、セクションの中の大きなまとまりどうし、帯の上下の内側 */
+  --page-section: var(--sp-24);   /* 96 セクションどうし、最後の内容→フッター */
+
+  color-scheme: light;
+}
+@media (max-width: 480px) { :root { --page-pad: var(--sp-2); --card-pad-x: var(--sp-4); --card-pad-y: var(--sp-8); } }
+
+/* ---------- 土台 ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); min-height: 100%; }
+body {
+  font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text); letter-spacing: var(--ls-base);
+  color: var(--ink-2); background: var(--bg-page);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden;
+  min-height: 100svh; display: grid; place-items: start center;
+  padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
+}
+/* 日本語は文節で折り返す。見出しは行の長さをそろえる。固有名詞と数字のまとまりは .nb で途中で切らない */
+.nb { white-space: nowrap; }
+h1, h2, h3, p, dd, li, small { word-break: auto-phrase; }
+p, dd, li, small { text-wrap: pretty; }
+h1, h2, h3 { text-wrap: balance; font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
+main p { color: var(--muted); }
+a { color: inherit; }
+a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
+.wrap { width: 100%; }
+section[id] { scroll-margin-top: var(--page-group); }
+
+/* ---------- カード ---------- */
+.card {
+  position: relative; width: min(100%, var(--card-w));
+  min-height: calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - var(--page-pad) * 2);
+  display: flex; flex-direction: column; padding: var(--card-pad-y) var(--card-pad-x); overflow: hidden;
+  border: var(--bw) solid var(--white-80); border-radius: var(--r-xl); background: var(--card); box-shadow: var(--shadow-card);
+  animation: enter var(--dur-enter) var(--ease-out) both;
+}
+@keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)) scale(.99); } to { opacity: 1; transform: none; } }
+
+/* ---------- ヘッダー：ロゴ（左）と営業状況（右）を1行に、区切り線、その下にナビ ---------- */
+.head .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap-head); padding-bottom: var(--gap-section); border-bottom: var(--bw) solid var(--ink-12); }
+/* ロゴ：コース名と同じ書き方。英字の名前（20px・400・-.04em・ink-2）の下に、小さな英字（12px・soft）。間0 */
+.brand { display: grid; color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { font-size: var(--fs-lg); line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
+.brand-sub { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
+/* 営業状況：点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft） */
+.status { display: none; align-items: baseline; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
+.status.on { display: flex; }
+.status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
+.status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
+.status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
+
+/* フッターの予約と連絡のリンク：左右の端までそろえて1行に。ナビはトップページのヘッダーだけ。押せる範囲だけ上下に16広げる */
+.foot-ext { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-item) var(--gap-list); }
+.foot-ext a { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
+@media (hover: hover) { .brand:hover { opacity: .6; } .foot-ext a:hover { color: var(--ink-2); } }
+
+/* ---------- 写真の枠（画像がないときは仮画像の面） ---------- */
+.ph { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--paper-hi) 0%, var(--accent-16) 100%); border-radius: var(--r-md); }
+.ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- 見出し：日本語だけ。セクション見出しは20で400、小見出しは本文と同じ14で600 ---------- */
+h2 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
+h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
+
+/* ---------- ページの並び（層2） ---------- */
+.page-title { padding-top: var(--page-group); }
+.courses { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
+.sec { padding-top: var(--page-section); }
+
+/* ---------- ページの題：セクション見出しと同じ形 ---------- */
+h1 { font-size: var(--fs-lg); margin-bottom: var(--gap-section); }
+
+/* ---------- コース：写真 → コース名（英語の下に日本語）→ 説明 → 料金表 ---------- */
+.course .ph { aspect-ratio: 3 / 2; }
+.course .name { display: grid; margin-bottom: 0; gap: var(--gap-tight); margin-top: var(--gap-section); font-size: var(--fs-lg); letter-spacing: var(--ls-latin); }
+.course .name small { font-size: var(--fs-sm); letter-spacing: var(--ls-base); color: var(--soft); }
+#request .name { display: grid; gap: var(--gap-tight); letter-spacing: var(--ls-latin); }   /* コース名と同じ形：英語の下に日本語 */
+#request .name small { font-size: var(--fs-sm); letter-spacing: var(--ls-base); color: var(--soft); }
+.course .name + p { margin-top: var(--gap-head); }
+
+/* ---------- 料金表：左に時間とその内訳、右に料金。線の行と料金の形はトップのコース一覧と同じ ---------- */
+.prices { list-style: none; border-top: var(--bw) solid var(--ink-12); }
+/* 単位：表の右上に1か所だけ「税込・円」（総額表示）。料金の数字には「¥」も「税込」も付けない */
+.unit { margin-top: var(--gap-section); margin-bottom: var(--gap-item); text-align: right; font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
+.unit + .mini, .unit + .prices { margin-top: 0; }
+h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ */
+p + .prices { margin-top: var(--gap-section); }
+.prices li { display: grid; grid-template-columns: 1fr auto; gap: 0 var(--gap-head); align-items: center; padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
+.prices .t { display: grid; gap: var(--gap-tight); line-height: var(--lh-ui); }
+.prices .t small { font-size: var(--fs-sm); color: var(--soft); }
+.prices b { font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); letter-spacing: var(--ls-latin); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- フッター ---------- */
+.site-foot { margin-top: auto; padding-top: var(--page-section); }
+
+/* ---------- 画面下のメニュー（LINEのリッチメニューのように画面の下に出す）
+   カードの中に溶け込む形：カードの幅の内側に、白の透ける面（white-50 → card）とぼかし。影と角丸は付けない。
+   上の区切り線はページの区切り線と同じく、中身の幅だけ。項目どうしは短い縦線で区切る。
+   絵は使わず、文字だけ。ボタンと同じ 14px・600・ink-2 にして、ページの言葉づかいに合わせる。
+   フッター（求人ページはフォーム）が見えてきたら、下へ引っ込めて隠す ---------- */
+.dock {
+  position: fixed; left: 50%; bottom: 0; z-index: 10;
+  width: min(100% - (var(--page-pad) + var(--bw)) * 2, var(--card-w) - var(--bw) * 2); translate: -50% 0;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  padding: 0 var(--card-pad-x) env(safe-area-inset-bottom, 0px);
+  background: linear-gradient(var(--white-50), var(--card));
+  -webkit-backdrop-filter: blur(var(--sp-3)); backdrop-filter: blur(var(--sp-3));
+  transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
+}
+.dock::before { content: ""; position: absolute; top: 0; left: var(--card-pad-x); right: var(--card-pad-x); height: var(--bw); background: var(--ink-12); }
+.dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
+/* 開いたとき、カードが現れ終わるころに下からすっと出てくる（1回だけ）。
+   backwards なので、出終わったあとは .hide の出し入れの邪魔をしない */
+.dock { animation: dock-in var(--dur-enter) var(--ease-out) var(--dock-delay) backwards; }
+@keyframes dock-in { from { translate: -50% 100%; opacity: 0; } }
+.dock a {
+  position: relative; display: grid; place-content: center;
+  min-height: var(--size-control); font-size: var(--fs-md); font-weight: var(--fw-semibold); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap; color: var(--ink-2);
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+.dock a + a::before { content: ""; position: absolute; left: 0; top: 50%; height: var(--sp-6); margin-top: calc(var(--sp-6) / -2); width: var(--bw); background: var(--ink-12); }
+.dock a:focus-visible { outline-offset: calc(var(--focus-w) * -1); border-radius: var(--r-md); }
+.dock a:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
+@media (hover: hover) { .dock a:hover { opacity: .6; } }
+
+.foot-body { padding-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
+.foot-ext { margin-top: var(--gap-section); }
+.footer { margin-top: var(--gap-section); font-family: var(--font-latin); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
+
+@keyframes rise { from { opacity: 0; translate: 0 var(--enter-y); } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+
+<body class="page-menu">
+<div class="card">
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+    <p class="status" id="status"></p>
+  </div>
+</header>
+
+<main>
+  <div class="page-title">
+    <h1>コースと料金</h1>
+    <p>もみほぐし、ドライヘッドスパ、<span class="nb">足つぼ・リフレクソロジー</span>の3つの施術を、単独や組み合わせでご用意しています。時間は30分から120分までで、選べる時間はコースによって異なります。</p>
+  </div>
+
+  <div class="courses">
+    <article class="course">
+      <div class="ph"><img src="../assets/img/course-body.webp" alt="もみほぐしの様子。服の上から背中をほぐす" width="960" height="640" decoding="async"></div>
+      <h2 class="name" lang="en">Body<small lang="ja">もみほぐし</small></h2>
+      <p>肩や腰など、気になるところを手でほぐすコースです。ほぐす範囲は、60分で半身、90分からは全身が目安です。</p>
+      <p class="unit">税込・円</p>
+      <ul class="prices">
+          <li><span class="t">30分</span><b>2,000</b></li>
+          <li><span class="t">60分</span><b>3,900</b></li>
+          <li><span class="t">90分</span><b>5,800</b></li>
+          <li><span class="t">120分</span><b>7,700</b></li>
+      </ul>
+    </article>
+    <article class="course">
+      <div class="ph"><img src="../assets/img/course-head.webp" alt="ドライヘッドスパの様子。あお向けで頭をほぐす" width="960" height="640" loading="lazy" decoding="async"></div>
+      <h2 class="name" lang="en">Head<small lang="ja">ドライヘッドスパ</small></h2>
+      <p>オイルを使わずに、頭から首、胸元をほぐすコースです。お好みで、お顔もほぐします。60分からは、もみほぐしも組み合わせます。</p>
+      <p class="unit">税込・円</p>
+      <ul class="prices">
+          <li><span class="t">30分<small><span class="nb">ドライヘッドスパのみ</span></small></span><b>2,800</b></li>
+          <li><span class="t">60分<small><span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし45分</span></small></span><b>4,300</b></li>
+          <li><span class="t">90分<small><span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし75分</span></small></span><b>6,200</b></li>
+          <li><span class="t">120分<small><span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし105分</span></small></span><b>8,100</b></li>
+      </ul>
+    </article>
+    <article class="course">
+      <div class="ph"><img src="../assets/img/course-foot.webp" alt="足つぼ・リフレクソロジーの様子。オイルで足をほぐす" width="960" height="640" loading="lazy" decoding="async"></div>
+      <h2 class="name" lang="en">Foot<small lang="ja">足つぼ・リフレクソロジー</small></h2>
+      <p>足裏を中心に、オイルで流すコースです。足のだるさが気になる方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
+      <p class="unit">税込・円</p>
+      <ul class="prices">
+          <li><span class="t">30分<small><span class="nb">足つぼ・リフレクソロジーのみ</span></small></span><b>3,000</b></li>
+          <li><span class="t">60分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">もみほぐし30分</span></small></span><b>4,900</b></li>
+          <li><span class="t">90分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">もみほぐし60分</span></small></span><b>6,800</b></li>
+          <li><span class="t">120分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">もみほぐし90分</span></small></span><b>8,700</b></li>
+      </ul>
+    </article>
+    <article class="course">
+      <div class="ph"><img src="../assets/img/course-full.webp" alt="足つぼ・ドライヘッドスパ・もみほぐしの3つの様子を並べた写真" width="960" height="640" loading="lazy" decoding="async"></div>
+      <h2 class="name" lang="en">Full<small lang="ja">3つの組み合わせ</small></h2>
+      <p><span class="nb">足つぼ・リフレクソロジー</span>、ドライヘッドスパ、もみほぐしの3つを組み合わせたコースです。90分から、お疲れの具合に合わせて全身を整えます。</p>
+      <p class="unit">税込・円</p>
+      <ul class="prices">
+          <li><span class="t">90分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし45分</span></small></span><b>7,200</b></li>
+          <li><span class="t">120分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし75分</span></small></span><b>9,100</b></li>
+      </ul>
+    </article>
+  </div>
+
+  <section class="sec" id="request">
+    <h2 class="name" lang="en">Staff Request<small lang="ja">ご指定</small></h2>
+    <p class="unit">税込・円</p>
+    <ul class="prices">
+      <li><span class="t">担当者・性別<small>担当者を直接ご指名いただくか、性別でご指定いただけます</small></span><b>400</b></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="foot-body">
+    <a class="brand" href="../" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
+    <nav class="foot-ext" aria-label="予約と連絡">
+      <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEB予約</a><a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a><a href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener">口コミを書く</a>
+    </nav>
+    <p class="footer" lang="en">&copy; 2026 relaxation salon momizo</p>
+  </div>
+</footer>
+</div>
+
+<nav class="dock" id="dock" aria-label="ご予約">
+  <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEBで予約する</a>
+  <a href="tel:0287339178">電話をかける</a>
+</nav>
+
+<!-- 営業時間はトップページの表・構造化データと同じ。変えるときは、両方のページの H を直す -->
+<script>
+/* 日本時間の「いま」 */
+const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+
+/* 営業状況（ヘッダー右）。いまの状態と、閉まる時刻か次に開く日時を1行に */
+(() => {
+  const H = { 0:[10,22], 1:[14,24], 2:null, 3:null, 4:[14,24], 5:[14,22], 6:[10,22] };
+  const DAY = ["日", "月", "火", "水", "木", "金", "土"];
+  const el = document.getElementById("status");
+  try {
+    const jp = jstNow();
+    const d = jp.getDay();
+    const now = jp.getHours() + jp.getMinutes() / 60;
+    const t = (n) => String(n).padStart(2, "0") + ":00";
+    const h = H[d];
+    let state, detail;
+    if (h && now >= h[0] && now < h[1]) {
+      state = "営業中"; detail = t(h[1]) + "まで"; el.classList.add("open");
+    } else if (h && now < h[0]) {
+      state = "準備中"; detail = t(h[0]) + "から";
+    } else {
+      let n = 1; while (!H[(d + n) % 7]) n++;
+      const next = (d + n) % 7;
+      state = h ? "営業時間外" : "定休日";
+      detail = (n === 1 ? "明日" : DAY[next] + "曜") + " " + t(H[next][0]) + "から";
+    }
+    el.innerHTML = "<b>" + state + "</b><span>" + detail + "</span>";
+    el.classList.add("on");
+  } catch (e) {}
+})();
+</script>
+<script>
+/* 画面下のメニュー：フッターが画面に入ってきたら隠す（フッターに同じリンクがあるため） */
+(() => {
+  const dock = document.getElementById("dock");
+  const foot = document.querySelector(".site-foot");
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const hide = foot.getBoundingClientRect().top < innerHeight;
+    dock.classList.toggle("hide", hide);
+    dock.inert = hide;
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  update();
+})();
+</script>
+</body>
+</html>
