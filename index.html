@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f4f2ed">
 <meta name="format-detection" content="telephone=no">
 <title>大田原市のリラクゼーションサロン | 揉蔵</title>
-<meta name="description" content="大田原市のリラクゼーションサロン、揉蔵（もみぞう）です。もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースもご用意しています。時間は30分から120分までで、選べる時間はコースによって異なります。">
+<meta name="description" content="しっかりほぐして、気軽に通える。大田原市のリラクゼーションサロン、揉蔵（もみぞう）です。もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -301,6 +301,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 
 /* ---------- ヒーロー：本文 → お知らせ → 写真。h1 は読み上げ用に隠す ---------- */
 .hero { padding-top: var(--page-group); }
+/* ヒーローの1行：サイト全体のメッセージ。見出しと同じ20px・ink-2 →16→ 本文 */
+.hero-lead { font-size: var(--fs-lg); line-height: var(--lh-ui); color: var(--ink-2); text-wrap: balance; }
+.hero-lead + p { margin-top: var(--gap-head); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }   /* 画面には出さず、読み上げと検索にだけ渡す */
 .hero-ph { margin-top: var(--page-group); animation: rise var(--dur-enter) var(--ease-out) both; }
 @keyframes rise { from { opacity: 0; translate: 0 var(--enter-y); } to { opacity: 1; translate: 0 0; } }
@@ -326,6 +329,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 @keyframes fade { from { opacity: 0; } }
 
 /* ---------- 揉蔵について：特徴の一覧（項目名なしの1列。線と文字は表と同じ）→ ボタン ---------- */
+/* 揉蔵について：大事にしている3つ（小見出し →16→ 1〜2文）を32ずつあけて並べ、特徴の一覧 → ボタンへ */
+.pillars { display: grid; gap: var(--gap-section); }
 .about h3 + p { margin-top: var(--gap-head); }
 .facts { list-style: none; margin-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
 .facts li { padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
@@ -336,6 +341,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .visit { display: grid; gap: var(--page-group); }
 .visit h3 + * { margin-top: var(--gap-head); }
 .links { display: grid; gap: var(--gap-list); }
+.visit p + .links { margin-top: var(--gap-block); }   /* クーポンの説明 →24→ 線のボタン */
 .stamp-ph + p { margin-top: var(--gap-head); }
 
 /* ---------- 営業時間・アクセス ---------- */
@@ -352,7 +358,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   "@type": "DaySpa",
   "name": "揉蔵",
   "alternateName": "relaxation salon momizo",
-  "description": "もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースもご用意しているリラクゼーションサロンです。",
+  "description": "しっかりほぐして、気軽に通える。もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しているリラクゼーションサロンです。",
   "url": "https://momizo2018.github.io/momizo-site/",
   "telephone": "+81-287-33-9178",
   "priceRange": "¥2,000〜¥9,100",
@@ -394,7 +400,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   <section class="hero">
     <div class="wrap">
       <h1 class="vh">揉蔵（もみぞう）</h1>
-      <p>大田原市のリラクゼーションサロン、<span class="nb">揉蔵（もみぞう）です。</span><br>もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースもご用意しています。</p>
+      <p class="hero-lead">しっかりほぐして、気軽に通える。</p>
+      <p>大田原市のリラクゼーションサロン、<span class="nb">揉蔵（もみぞう）です。</span><br>もみほぐしを中心に、ドライヘッドスパ、<span class="nb">足つぼ・リフレクソロジー</span>のコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。</p>
       <section class="notice" id="notice" data-state="loading" aria-labelledby="notice-h" aria-live="polite">
         <h2 id="notice-h">お知らせ</h2>
         <ul class="notice-list" id="notices"></ul>
@@ -408,8 +415,20 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
     <div class="wrap">
       <h2>揉蔵について</h2>
       <div class="about">
-        <h3>肩の力を抜ける、静かな場所。</h3>
-        <p>飾りすぎず、ケアそのものに向き合う場所です。肩や腰のつらさ、日々の疲れを、時間をかけてほぐします。ほっと一息つける<span class="nb">ひととき</span>を、お過ごしください。</p>
+        <div class="pillars">
+          <div>
+            <h3>一人ひとりに合わせて、丁寧に。</h3>
+            <p>お疲れの箇所やお好みに合わせて、力加減を調整しながら、スタッフが丁寧にもみほぐします。</p>
+          </div>
+          <div>
+            <h3>通いやすい料金で。</h3>
+            <p><span class="nb">30分2,000円</span>から。短い時間でも、気になるところをしっかりほぐします。</p>
+          </div>
+          <div>
+            <h3>通うほど、お得に。</h3>
+            <p>割引クーポンやスタンプカードもご用意しています。</p>
+          </div>
+        </div>
         <ul class="facts">
           <li>月・木は24時まで営業</li>
           <li>当日のご予約も受付</li>
@@ -426,6 +445,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
       <div class="visit">
         <div>
           <h3>クーポン</h3>
+          <p>期間限定の割引クーポンや、<span class="nb">公式LINE</span>の友だち限定クーポンを、その時々でご用意しています。ご来店の前に、使えるクーポンがないか確かめてみてください。</p>
           <div class="links">
             <!-- 公式LINEのアカウントページ。全員向けのクーポンが載っている。ブラウザでそのまま見られ、クーポンが替わってもリンクは切れない -->
             <a class="line" href="https://page.line.me/cvj7583f" target="_blank" rel="noopener"><span class="action-copy">公開中のクーポン</span><span class="line-arrow" aria-hidden="true">↗</span></a>
@@ -438,8 +458,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
         <div>
           <h3>スタンプカード</h3>
           <div class="ph stamp-ph"><img src="assets/img/stamp.webp" alt="スタンプカード。表の絵と、裏の12マス" width="960" height="560" loading="lazy" decoding="async"></div>
-          <p>施術30分ごとに、スタンプを1つ押します。12個たまると、<span class="nb">500円OFF</span>になります。</p>
-          <p class="note">ほかの特典とは併用できません。有効期限は、最後のご利用日から1年です。</p>
+          <p>施術30分ごとに、スタンプを1つ押します。60分なら2つ、120分なら4つです。12個たまったカードをお持ちいただくと、次回以降のお会計から<span class="nb">500円OFF</span>になります。120分のコースなら、3回でたまります。</p>
+          <p class="note">スタンプがたまった日のお会計には使えません。ほかの特典とは併用できません。有効期限は、最後のご利用日から1年です。</p>
         </div>
       </div>
     </div>
