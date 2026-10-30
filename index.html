@@ -118,14 +118,18 @@ body {
 }
 /* 日本語は文節で折り返す。見出しは行の長さをそろえる。固有名詞と数字のまとまりは .nb で途中で切らない */
 .nb { white-space: nowrap; }
-h1, h2, h3, p, dd, li, small { word-break: auto-phrase; }
+/* 日本語の折り返し：文節で。対応するブラウザ（Chrome など）は auto-phrase。
+   対応しないブラウザ（iPhone の Safari など）は keep-all にして、下のスクリプトが入れる <wbr> の位置だけで折り返す。
+   長すぎて入りきらないときだけ、どこでも折り返す（break-word） */
+body { word-break: keep-all; overflow-wrap: break-word; }
+@supports (word-break: auto-phrase) { body { word-break: auto-phrase; } }
 p, dd, li, small { text-wrap: pretty; }
 h1, h2, h3 { text-wrap: balance; font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
 .wrap { width: 100%; }
-section[id] { scroll-margin-top: var(--page-group); }
+section[id], article[id] { scroll-margin-top: var(--page-group); }
 
 /* ---------- カード ---------- */
 .card {
@@ -150,11 +154,13 @@ section[id] { scroll-margin-top: var(--page-group); }
 .status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
 .status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
 
-/* ナビ（トップページのヘッダーだけ）とフッターの予約と連絡のリンク：左右の端までそろえて1行に。押せる範囲だけ上下に16広げる */
-.nav, .foot-ext { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-item) var(--gap-list); }
+/* ナビとフッターのリンク：左右の端までそろえて1行に。ヘッダーのナビは、そのページの見出しを上から順に（ページ内へ飛ぶ）。
+   フッターは2段：1段目はページ（トップ → コースと料金 → セラピスト募集）、2段目は外部（WEB予約 → 電話 → 公式LINE → 口コミを書く） */
+.nav, .foot-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-item); }
 .nav { margin-top: var(--gap-head); }
-.nav a, .foot-ext a { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
-@media (hover: hover) { .brand:hover { opacity: .6; } .nav a:hover, .foot-ext a:hover { color: var(--ink-2); } }
+.nav a, .foot-nav a, .foot-nav span { padding: var(--gap-head) 0; margin: calc(var(--gap-head) * -1) 0; font-size: var(--fs-sm); line-height: var(--lh-none); text-decoration: none; white-space: nowrap; color: var(--muted); transition: color var(--dur-base) var(--ease-out); }
+.foot-nav [aria-current] { color: var(--faint); }   /* 今いるページは薄くして、リンクにしない */
+@media (hover: hover) { .brand:hover { opacity: .6; } .nav a:hover, .foot-nav a:hover { color: var(--ink-2); } }
 
 /* ---------- 写真の枠（画像がないときは仮画像の面） ---------- */
 .ph { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--paper-hi) 0%, var(--accent-16) 100%); border-radius: var(--r-md); }
@@ -262,7 +268,7 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
   border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background-color: var(--white-50); color: var(--ink-2); text-decoration: none;
   transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); word-break: auto-phrase; text-wrap: balance; }
+.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); text-wrap: balance; }
 .line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid var(--ink-12); border-radius: 50%; background: var(--white-80); line-height: var(--lh-none); color: var(--muted); }
 .line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .line:hover { background-color: var(--white); border-color: var(--ink-20); transform: translateY(var(--lift)); } }
@@ -304,7 +310,8 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
 @media (hover: hover) { .dock a:hover { opacity: .6; } }
 
 .foot-body { padding-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
-.foot-ext { margin-top: var(--gap-section); }
+.foot-pages { margin-top: var(--gap-section); }
+.foot-ext { margin-top: var(--gap-section); }   /* 段どうしは32（押せる範囲の上下16が重ならないように） */
 .footer { margin-top: var(--gap-section); font-family: var(--font-latin); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @keyframes rise { from { opacity: 0; translate: 0 var(--enter-y); } to { opacity: 1; translate: 0 0; } }
@@ -348,8 +355,8 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
     <p class="status" id="status"></p>
   </div>
-  <nav class="nav" aria-label="メインメニュー">
-    <a href="menu/">メニュー</a><a href="#benefit">はじめての方へ</a><a href="#access">アクセス</a><a href="recruit/">求人</a>
+  <nav class="nav" aria-label="このページの目次">
+    <a href="#menu">コースと料金</a><a href="#benefit">はじめての方へ</a><a href="#hours">営業時間</a><a href="#access">アクセス</a>
   </nav>
 </header>
 
@@ -438,7 +445,7 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
       <h2>アクセス</h2>
       <div class="access">
         <dl class="info">
-          <div><dt>住所</dt><dd>〒324-0041<br>栃木県大田原市<span class="nb">本町1丁目2701-11</span><br><span class="nb">サイトー・バルコニー107</span></dd></div>
+          <div><dt>住所</dt><dd>〒324-0041<br>栃木県大田原市<wbr><span class="nb">本町1丁目2701-11</span><br><span class="nb">サイトー・バルコニー107</span></dd></div>
           <div><dt>目印</dt><dd>ハローワーク大田原の近く</dd></div>
           <div><dt>支払い</dt><dd>現金のほか、以下に対応<span class="pay"><b>クレジットカード</b>Visa、Mastercard、JCB、<span class="nb">American Express</span>、<span class="nb">Diners Club</span>、Discover</span><span class="pay"><b>電子マネー</b><span class="nb">交通系IC</span>、iD、QUICPay</span><span class="pay"><b>QRコード決済</b>PayPay、d払い、楽天ペイ、<span class="nb">au PAY</span> など</span></dd></div>
         </dl>
@@ -464,8 +471,11 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
 <footer class="site-foot">
   <div class="foot-body">
     <a class="brand" href="./" aria-label="momizo トップページ"><span class="brand-name" lang="en">momizo</span><span class="brand-sub" lang="en">relaxation salon</span></a>
-    <nav class="foot-ext" aria-label="予約と連絡">
-      <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEB予約</a><a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a><a href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener">口コミを書く</a>
+    <nav class="foot-nav foot-pages" aria-label="ページ">
+      <span aria-current="page">トップ</span><a href="menu/">コースと料金</a><a href="recruit/">セラピスト募集</a>
+    </nav>
+    <nav class="foot-nav foot-ext" aria-label="予約と連絡">
+      <a href="https://app.squareup.com/appointments/book/tli4clkb20flxc/LZPVZXQ5CZ1A5/start">WEB予約</a><a href="tel:0287339178">電話</a><a href="https://page.line.me/cvj7583f" target="_blank" rel="noopener">公式LINE</a><a href="https://g.page/r/CUU9HvUGSyP-EAE/review" target="_blank" rel="noopener">口コミを書く</a>
     </nav>
     <p class="footer" lang="en">&copy; 2026 relaxation salon momizo</p>
   </div>
@@ -572,6 +582,65 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
   addEventListener("scroll", onScroll, { passive: true });
   addEventListener("resize", onScroll);
   update();
+})();
+</script>
+<script>
+/* 文節で折り返す（word-break: auto-phrase に対応していないブラウザ用。主に iPhone の Safari）
+   日本語の文章に、折り返してよい位置だけ <wbr> を入れる。CSS の keep-all で、それ以外の位置では折り返さない。
+   折り返してよい位置：
+   ・「、」「。」「：」「）」などの後
+   ・ひらがなの後に、漢字・カタカナ・英数字・「（」などが続くところ（例：大田原市の|リラクゼーションサロン）
+     ただし「お」「ご」の後の漢字は続ける（ご|予約 にしない）
+   ・カタカナ語の後の「（」の前
+   漢字の後の「（」の前と、「・」の後では折り返さない（揉蔵|（もみぞう）、足つぼ・|リフレクソロジー にしない）
+   あとから入る文字（お知らせ・営業状況・入力のエラーなど）も、見つけしだい同じように区切る */
+(() => {
+  if (window.CSS && CSS.supports("word-break", "auto-phrase")) return;
+  const HIRA = /[\u3041-\u309f]/, KANJI = /[\u3400-\u4dbf\u4e00-\u9fff々〆]/;
+  const KATA = /[\u30a1-\u30fa\u30fc-\u30ff\u31f0-\u31ff]/, ALNUM = /[A-Za-z0-9０-９Ａ-Ｚａ-ｚ]/;
+  const OPEN = /[（「『【〈《［｛(]/, CLOSE = /[、。，．！？：）」』】〉》］｝]/;
+  const can = (a, b) => {
+    if (CLOSE.test(a)) return !CLOSE.test(b) && b !== " ";
+    if (HIRA.test(a)) {
+      if ((a === "お" || a === "ご") && KANJI.test(b)) return false;
+      return KANJI.test(b) || KATA.test(b) || ALNUM.test(b) || OPEN.test(b);
+    }
+    if (KATA.test(a) && OPEN.test(b)) return true;   // カタカナ語の後の「（」は区切ってよい（リフレクソロジー|（オイル使用））
+    return false;
+  };
+  const SKIP = "script,style,textarea,select,option,title,.nb,[lang='en'],[data-nowrap]";
+  const split = (node) => {
+    const t = node.nodeValue;
+    if (!t || !/[\u3041-\u30ff\u3400-\u9fff]/.test(t)) return;
+    const p = node.parentElement;
+    if (!p || p.closest(SKIP)) return;
+    // 区切らない位置のうち、keep-all でも折り返されてしまう「（」の前と「・」の後には、見えない「つなぎ」（U+2060）を入れる
+    const parts = []; let from = 0, cur = t[0], glued = false;
+    for (let i = 1; i < t.length; i++) {
+      if (can(t[i - 1], t[i])) { parts.push(cur); cur = ""; }
+      else if ((OPEN.test(t[i]) && KANJI.test(t[i - 1])) || t[i - 1] === "・") { cur += "\u2060"; glued = true; }
+      cur += t[i];
+    }
+    if (!parts.length && !glued) return;
+    parts.push(cur);
+    const frag = document.createDocumentFragment();
+    parts.forEach((s, i) => { if (i) frag.append(document.createElement("wbr")); frag.append(s); });
+    node.replaceWith(frag);
+  };
+  const walk = (root) => {
+    if (root.nodeType === 3) return split(root);
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const list = []; while (w.nextNode()) list.push(w.currentNode);
+    list.forEach(split);
+  };
+  const mo = new MutationObserver((recs) => {
+    mo.disconnect();
+    recs.forEach((r) => r.type === "characterData" ? split(r.target) : r.addedNodes.forEach(walk));
+    watch();
+  });
+  const watch = () => mo.observe(document.body, { childList: true, subtree: true, characterData: true });
+  walk(document.body);
+  watch();
 })();
 </script>
 </body>
