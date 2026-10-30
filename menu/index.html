@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f4f2ed">
 <meta name="format-detection" content="telephone=no">
 <title>コースと料金 | 揉蔵</title>
-<meta name="description" content="揉蔵（もみぞう）のコースと料金です。もみほぐし、ドライヘッドスパ、足つぼ・リフレクソロジーの3つの施術を、単独や組み合わせでご用意しています。時間は30分から120分までで、選べる時間はコースによって異なります。">
+<meta name="description" content="揉蔵（もみぞう）のコースと料金です。選べるコース、続けやすい価格。もみほぐし、ドライヘッドスパ、足つぼ・リフレクソロジーの3つの施術を、単独や組み合わせでご用意しています。気になるところだけを短くほぐしたい方から、全身をじっくりケアしたい方まで、ご希望やお疲れに合わせてお選びください。">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -255,6 +255,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 
 /* ---------- ページの並び ---------- */
 .page-title { padding-top: var(--page-group); }
+/* ページの題のひとこと：小見出しと同じ14px・600・ink-2 →16→ 本文 */
+.lead { font-weight: var(--fw-semibold); line-height: var(--lh-ui); color: var(--ink-2); }
+.lead + p { margin-top: var(--gap-head); }
 .courses { display: grid; gap: var(--page-group); margin-top: var(--page-group); }
 
 /* ---------- コース名：名前（20px）の下に、施術名（12px・soft）。間4。リクエスト料も同じ形 ---------- */
@@ -296,14 +299,15 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
 <main>
   <div class="page-title">
     <h1>コースと料金</h1>
-    <p>もみほぐし、ドライヘッドスパ、<span class="nb">足つぼ・リフレクソロジー</span>の3つの施術を、単独や組み合わせでご用意しています。時間は30分から120分までで、選べる時間はコースによって異なります。</p>
+    <p class="lead">選べるコース、続けやすい価格。</p>
+    <p>もみほぐし、ドライヘッドスパ、<span class="nb">足つぼ・リフレクソロジー</span>の3つの施術を、単独や組み合わせでご用意しています。気になるところだけを短くほぐしたい方から、全身をじっくりケアしたい方まで、ご希望やお疲れに合わせてお選びください。時間は30分から120分までで、選べる時間はコースによって異なります。</p>
   </div>
 
   <div class="courses">
     <article class="course" id="body">
       <div class="ph"><img src="../assets/img/course-body.webp" alt="もみほぐしの様子。服の上から背中をほぐす" width="960" height="560" decoding="async"></div>
       <h2 class="name">ボディコース<small>もみほぐし</small></h2>
-      <p>肩や腰など、気になるところを手でほぐすコースです。ほぐす範囲は、60分で半身、90分からは全身が目安です。</p>
+      <p>肩や首、腰、背中、脚など、気になるところを中心に手でほぐすコースです。力加減は、お好みに合わせて調整します。ほぐす範囲は、60分で半身、90分からは全身が目安です。</p>
       <p class="unit">税込・円</p>
       <ul class="prices">
           <li><span class="t">30分</span><b>2,000</b></li>
@@ -315,7 +319,7 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
     <article class="course" id="head">
       <div class="ph"><img src="../assets/img/course-head.webp" alt="ドライヘッドスパの様子。あお向けで頭をほぐす" width="960" height="560" loading="lazy" decoding="async"></div>
       <h2 class="name">ヘッドコース<small>ドライヘッドスパ</small></h2>
-      <p>オイルを使わずに、頭から首、胸元をほぐすコースです。お好みで、お顔もほぐします。60分からは、もみほぐしも組み合わせます。</p>
+      <p>オイルを使わずに、頭から首、胸元をほぐすコースです。お好みで、お顔もほぐします。頭まわりをじっくりケアしたい方や、ゆっくりリラックスしたい方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
       <p class="unit">税込・円</p>
       <ul class="prices">
           <li><span class="t">30分<small><span class="nb">ドライヘッドスパのみ</span></small></span><b>2,800</b></li>
@@ -327,7 +331,7 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
     <article class="course" id="foot">
       <div class="ph"><img src="../assets/img/course-foot.webp" alt="足つぼ・リフレクソロジーの様子。オイルで足をほぐす" width="960" height="560" loading="lazy" decoding="async"></div>
       <h2 class="name">フットコース<small>足つぼ・リフレクソロジー</small></h2>
-      <p>足裏を中心に、オイルで流すコースです。足のだるさが気になる方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
+      <p>足裏を中心に、オイルで流すコースです。立ち仕事や歩くことが多い方、足の疲れやだるさが気になる方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
       <p class="unit">税込・円</p>
       <ul class="prices">
           <li><span class="t">30分<small><span class="nb">足つぼ・リフレクソロジーのみ</span></small></span><b>3,000</b></li>
@@ -339,7 +343,7 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
     <article class="course" id="full">
       <div class="ph"><img src="../assets/img/course-foot.webp" alt="足つぼ・リフレクソロジーの様子" width="960" height="560" loading="lazy" decoding="async"><img src="../assets/img/course-head.webp" alt="ドライヘッドスパの様子" width="960" height="560" loading="lazy" decoding="async"><img src="../assets/img/course-body.webp" alt="もみほぐしの様子" width="960" height="560" loading="lazy" decoding="async"></div>
       <h2 class="name">フルコース<small>3つの組み合わせ</small></h2>
-      <p><span class="nb">足つぼ・リフレクソロジー</span>、ドライヘッドスパ、もみほぐしの3つを組み合わせたコースです。90分から、お疲れの具合に合わせて全身を整えます。</p>
+      <p><span class="nb">足つぼ・リフレクソロジー</span>、ドライヘッドスパ、もみほぐしの3つを組み合わせたコースです。90分から、頭から足まで全身をじっくりケアします。ゆったりとした時間をお過ごしください。</p>
       <p class="unit">税込・円</p>
       <ul class="prices">
           <li><span class="t">90分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし45分</span></small></span><b>7,200</b></li>
