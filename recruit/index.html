@@ -59,6 +59,11 @@
   --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
   --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
   --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、フッターの各段の間 */
+  --gap-logo: var(--sp-12);     /* 48 ヘッダーのロゴ→ページの行（ロゴを独立させる） */
+
+  /* 枠の内側（2種類） */
+  --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
+  --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
 
   /* 横の位置（幅480px以下で変わる） */
   --page-pad: var(--sp-4);
@@ -68,7 +73,7 @@
 
   /* 部品の大きさ */
   --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ（固有値） */
-  --label-col: var(--sp-16);    /* 64 表の項目欄の幅（固有値） */
+  --label-col: var(--sp-16);    /* 64 フォームの曜日の欄の幅（固有値） */
   --arrow: var(--sp-8);         /* 32 矢印の丸 */
 
   /* 線・角丸・影 */
@@ -78,7 +83,6 @@
 
   /* 文字 */
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --font-latin: "Inter", sans-serif;
   --fw-regular: 400; --fw-semibold: 600;
   --fs-sm: 14px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
   --fs-md: 16px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
@@ -106,20 +110,19 @@
 
 /* ---------- 土台 ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); min-height: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); }
 body {
   font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
   color: var(--ink-2); background: var(--bg-page);
-  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
 /* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
-h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
+h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
-.wrap { width: 100%; }
 section[id], article[id] { scroll-margin-top: var(--page-group); }
 
 /* ---------- カード ---------- */
@@ -137,14 +140,14 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 .head .brand { font-size: var(--fs-logo); }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
-.head-pages { margin-top: var(--sp-12); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
+.head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 
-/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。間0。
+/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。2行の間は relaxation salon の -.35em 詰める（ロゴの中の値。大きさを変えても同じ比率）。
    1つの塊として大きさを変え、relaxation salon は momizo の0.6倍。
    フッターは relaxation salon を小さい文字と同じ14pxにそろえ、momizo はその逆算（14÷0.6≒23.3）。ヘッダーは relaxation salon を20pxにそろえ、momizo はその逆算（20÷0.6≒33.3） */
-.brand { display: grid; font-size: calc(var(--fs-sm) / .6); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { font-size: 1em; line-height: var(--lh-ui); color: var(--ink-2); }
-.brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
+.brand { display: grid; font-size: calc(var(--fs-sm) / .6); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { line-height: var(--lh-ui); }
+.brand-sub { margin-top: -.35em; font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
 /* 営業状況：ヘッダーのいちばん上、右端に1行。点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。
    →8→ ロゴ。中身はスクリプトが入れてから見せる（行の高さは先に取っておき、出たときにロゴが動かないようにする） */
@@ -193,7 +196,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
 .dock a {
   position: relative; display: grid; place-content: center;
-  min-height: var(--size-control); font-size: var(--fs-md); font-weight: var(--fw-semibold); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap; color: var(--ink-2);
+  min-height: var(--size-control); font-weight: var(--fw-semibold); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
 .dock a + a::before { content: ""; position: absolute; left: 0; top: 50%; height: var(--sp-6); margin-top: calc(var(--sp-6) / -2); width: var(--bw); background: var(--ink-12); }
@@ -206,7 +209,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .foot-body { padding-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
 .foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 .foot-ext { margin-top: var(--gap-head); }   /* 線の上下16。押せる範囲は線のところで接する */
-.footer { margin-top: var(--gap-section); font-family: var(--font-latin); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
+.footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ===== 共通：土台ここまで ===== */
@@ -233,9 +236,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 /* ===== 共通：ボタンと補足ここまで ===== */
 
 /* ===== 共通：項目と内容の表・地図・線のボタン ===== */
-/* 項目と内容の表：左に項目名（soft）、右に内容。各行の下と表の上に区切り線 */
+/* 項目と内容の表：項目名（soft）の下に内容。各行の下と表の上に区切り線。
+   項目名を上に置くので、画面が狭くても内容の幅を取れる */
 .info { display: grid; border-top: var(--bw) solid var(--ink-12); }
-.info > div { display: grid; grid-template-columns: var(--label-col) minmax(0, 1fr); align-items: baseline; gap: 0 var(--gap-head); padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
+.info > div { display: grid; gap: var(--gap-tight); padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
 .info dt { color: var(--soft); }
 .hours dd { font-variant-numeric: tabular-nums; }
 
@@ -246,8 +250,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 /* 線のボタン（外部サイトへのリンク）：左に名前、右に矢印の丸 */
 .line {
   display: flex; align-items: center; justify-content: space-between; gap: var(--gap-head);
-  min-height: var(--size-control); padding: var(--gap-list) var(--gap-head);
-  border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background-color: var(--white-50); color: var(--ink-2); text-decoration: none;
+  min-height: var(--size-control); padding: var(--pad-part);
+  border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background-color: var(--white-50); text-decoration: none;
   transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
 .action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); }
@@ -263,6 +267,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   --page-group: var(--sp-16);     /* 64 ナビ→最初の内容 */
   --page-section: var(--sp-24);   /* 96 セクションどうし、最後の内容→フッター */
   --err: #b3261e;                 /* 入力の誤り（求人ページのフォームだけ） */
+  --pad-tag: var(--sp-1) var(--sp-3);      /* 特徴の札の内側 上下4・左右12 */
+  --pad-choice: var(--sp-2) var(--sp-4);   /* 「できる／できない」の内側 上下8・左右16 */
   --fs-display: 72px;             /* 固有値：「65%」の数字。ページで一番伝えたい数字なので、ここだけ大きく */
 }
 
@@ -270,24 +276,24 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .page-title { padding-top: var(--page-group); }
 /* 特徴の札：細い線（ink-12）の角丸の札。面は white-50、文字は14・muted */
 .tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--gap-item); margin-top: var(--gap-block); }
-.tags li { padding: var(--sp-1) var(--gap-list); border: var(--bw) solid var(--ink-12); border-radius: var(--r-pill); background: var(--white-50); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
+.tags li { padding: var(--pad-tag); border: var(--bw) solid var(--ink-12); border-radius: var(--r-pill); background: var(--white-50); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
 /* 「65%」の箱：強調の文と同じ accent-08 の面。数字だけ固有値の72px */
-.big { margin-top: var(--gap-section); padding: var(--gap-block); border-radius: var(--r-md); background: var(--accent-08); }
+.big { margin-top: var(--gap-section); padding: var(--pad-box); border-radius: var(--r-md); background: var(--accent-08); }
 .big .l, .big .t { font-size: var(--fs-sm); color: var(--soft); }
 .big .n { margin-top: var(--gap-item); font-size: var(--fs-display); line-height: var(--lh-none); font-variant-numeric: tabular-nums; color: var(--ink-2); }
-.big .n small { margin-left: var(--sp-1); font-size: var(--fs-lg); color: var(--soft); }   /* 「%」は20px・soft */
+.big .n small { margin-left: var(--gap-tight); font-size: var(--fs-lg); color: var(--soft); }   /* 「%」は20px・soft */
 .big .extra { margin-top: var(--gap-head); color: var(--ink-2); }
 .big .t { margin-top: var(--gap-tight); }
 
 /* ---------- 報酬早見表：線で区切ったコースの一覧 ---------- */
 .rate { padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
 .rate:first-of-type { border-top: var(--bw) solid var(--ink-12); }
-/* コース名は小見出しと同じ16・600（セクション見出しより小さく）。下に施術名14・soft */
+/* コース名は小見出しと同じ16・600（セクション見出しより小さく）。下に施術名14・soft、間4 */
 .rate .name { display: grid; gap: var(--gap-tight); margin-bottom: var(--gap-head); }
 .rate .name small { font-size: var(--fs-sm); font-weight: var(--fw-regular); color: var(--soft); }
 /* 「もみほぐしを含む」の括弧（60〜120分の上）。横線は文字の高さの中央、両端は下のマスへ下ろす */
-.br { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-item); margin-bottom: var(--sp-1); }
-.br span { grid-column: 2 / 5; display: flex; gap: var(--gap-item); padding-bottom: var(--sp-1); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
+.br { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-item); margin-bottom: var(--gap-tight); }
+.br span { grid-column: 2 / 5; display: flex; gap: var(--gap-item); padding-bottom: var(--gap-tight); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
 .br span::before, .br span::after { content: ""; flex: 1; margin-top: calc(var(--fs-sm) * var(--lh-ui) / 2); border-top: var(--bw) solid var(--ink-12); }
 .br span::before { border-left: var(--bw) solid var(--ink-12); }
 .br span::after { border-right: var(--bw) solid var(--ink-12); }
@@ -296,7 +302,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .g div { text-align: center; line-height: var(--lh-ui); }
 .g div > * { display: block; }
 .g span, .g small { font-size: var(--fs-sm); color: var(--soft); font-variant-numeric: tabular-nums; }
-.g b { font-size: var(--fs-md); font-weight: var(--fw-regular); font-variant-numeric: tabular-nums; color: var(--ink-2); }   /* 報酬額は本文と同じ14で ink-2。大きな数字は「65%」だけ */
+.g b { font-weight: var(--fw-regular); font-variant-numeric: tabular-nums; color: var(--ink-2); }   /* 報酬額は本文と同じ14で ink-2。大きな数字は「65%」だけ */
 .g-from-90 > :first-child { grid-column: 3; }   /* 90分からのコース（フルコース）は、時間の列をほかとそろえる */
 
 /* ---------- 働き方：特徴の一覧と同じ線の一覧。1文（16・ink-2）→4→ 説明（14・muted） ---------- */
@@ -305,14 +311,13 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .points b { font-weight: var(--fw-regular); line-height: var(--lh-ui); }
 .points span { font-size: var(--fs-sm); color: var(--muted); }
 
-/* ---------- 募集要項・店舗情報：文章の表は項目名を内容の上に置く（.stack） ---------- */
-.info.stack > div { grid-template-columns: minmax(0, 1fr); gap: var(--gap-tight) 0; }
+/* ---------- 募集要項・店舗情報 ---------- */
 .info dd ul { margin-top: var(--gap-item); padding-left: var(--gap-head); }
 .info dd small { display: block; margin-top: var(--gap-item); font-size: var(--fs-sm); color: var(--soft); }
 .salon h3 { margin: var(--gap-section) 0 var(--gap-head); }
 .info .mapbox { margin-top: var(--gap-list); }   /* アクセスの欄：一言→地図12→地図のボタン12 */
 /* 強調の文：お知らせと同じ ink-2 の本文を、accent-08 の面に */
-.hl { margin-top: var(--gap-list); padding: var(--gap-list) var(--gap-head); border-radius: var(--r-md); background: var(--accent-08); color: var(--ink-2); }
+.hl { margin-top: var(--gap-list); padding: var(--pad-part); border-radius: var(--r-md); background: var(--accent-08); color: var(--ink-2); }
 .info + .hl { margin-top: var(--gap-head); }
 
 /* ---------- 応募フォーム ---------- */
@@ -320,7 +325,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .f { display: grid; gap: var(--gap-item); min-width: 0; border: 0; }
 .f > legend { margin-bottom: var(--gap-item); }   /* legend は並びの外なので、間隔を自分で持つ */
 .f > label:not(.sub, .chk), .f > legend { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-semibold); line-height: var(--lh-ui); }   /* 項目名は小見出しと同じ16px・600 */
-.req, .opt { font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); }   /* 必須・任意は札にせず、14pxの文字だけ */
+.req, .opt { font-size: var(--fs-sm); font-weight: var(--fw-regular); }   /* 必須・任意は札にせず、14pxの文字だけ */
 .req { color: var(--accent-hover); }
 .opt { color: var(--soft); }
 main .hint, main .err { font-size: var(--fs-sm); color: var(--soft); }
@@ -334,7 +339,7 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
 .age b { font-size: var(--fs-md); font-weight: var(--fw-regular); color: var(--ink-2); }
 /* 入力欄：本文と同じ16px（16px未満だと iPhone で拡大されるので、下げない）、white-80、縁 ink-12、角丸16、内側 上下12・左右16 */
 .form input[type=text], .form input[type=tel], .form input[type=email], .form select, .form textarea {
-  width: 100%; padding: var(--gap-list) var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-80);
+  width: 100%; padding: var(--pad-part); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-80);
   color: var(--ink-2); font: inherit; font-size: var(--fs-md); line-height: var(--lh-ui);
   -webkit-appearance: none; appearance: none; transition: border-color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
 }
@@ -352,11 +357,11 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
 .form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
 .form input[readonly], .form input[readonly]:focus { background: var(--paper); border-color: var(--ink-12); cursor: default; }
 /* 対応できる施術：囲みの欄に、施術名と「できる／できない」の選択ボタン */
-.skill { display: grid; justify-items: start; gap: var(--gap-item); padding: var(--gap-list) var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); }
+.skill { display: grid; justify-items: start; gap: var(--gap-item); padding: var(--pad-part); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); }
 .seg { display: flex; gap: var(--gap-item); }
 .seg label { position: relative; display: block; cursor: pointer; }
 .seg input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.seg span { display: block; min-width: var(--sp-16); padding: var(--gap-item) var(--gap-head); border: var(--bw) solid var(--ink-20); border-radius: var(--r-pill); background: var(--white-80); color: var(--muted); line-height: var(--lh-ui); text-align: center; transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out); }
+.seg span { display: block; min-width: var(--sp-16); padding: var(--pad-choice); border: var(--bw) solid var(--ink-20); border-radius: var(--r-pill); background: var(--white-80); color: var(--muted); line-height: var(--lh-ui); text-align: center; transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out); }
 .seg input:checked + span { border-color: var(--accent); background: var(--accent); color: var(--white); }
 .seg input:focus-visible + span { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
 /* ご希望の業務枠（曜日の行はスクリプトで作る）。曜日の欄は表の項目欄と同じ64 */
@@ -368,15 +373,15 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
 .form .day select { --pad-x: var(--gap-item); }   /* 曜日の行は2つ並ぶので、左右と▼の余白を8に。320px幅でも「00:00」が収まる */
 .form .day select:disabled { opacity: .4; cursor: default; }
 /* 同意・送信（送信は .btn） */
-.chk { display: flex; align-items: flex-start; gap: var(--gap-list); padding: var(--gap-list) var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); line-height: var(--lh-ui); cursor: pointer; }
+.chk { display: flex; align-items: flex-start; gap: var(--gap-list); padding: var(--pad-part); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); line-height: var(--lh-ui); cursor: pointer; }
 .chk input { margin-top: calc((var(--fs-md) * var(--lh-ui) - var(--sp-4)) / 2); }   /* 1行目の高さの中央 */
 .chk .req { margin-left: var(--gap-item); }
 .send { font-family: inherit; cursor: pointer; }
 .send:disabled { opacity: .4; cursor: default; transform: none; }
 main #form-msg { margin-top: 0; color: var(--err); }
-#form-msg:not(:empty) { margin-top: var(--gap-item); }
+#form-msg:not(:empty) { margin-top: var(--gap-list); }   /* 部品の下の補足と同じ12 */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }   /* スパム対策の隠し欄 */
-.done { padding: var(--gap-block); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); text-align: center; }
+.done { padding: var(--pad-box); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); text-align: center; }
 .done h3 { margin-bottom: var(--gap-item); }
 /* ===== このページだけここまで ===== */
 </style>
@@ -449,42 +454,42 @@ main #form-msg { margin-top: 0; color: var(--err); }
   <section class="sec" id="reward">
     <div class="wrap">
       <h2>報酬早見表</h2>
-      <p class="sec-note">コースごとの報酬額です（税込・円）。小さい数字は表示価格です。</p>
+      <p class="sec-note">コースごとの報酬額です（税込）。小さい数字は表示価格です。</p>
 
       <div class="rate">
         <h3 class="name">ボディコース<small>もみほぐし</small></h3>
         <div class="g">
-          <div><span>30分</span><b>1,300</b><small>2,000</small></div>
-          <div><span>60分</span><b>2,535</b><small>3,900</small></div>
-          <div><span>90分</span><b>3,770</b><small>5,800</small></div>
-          <div><span>120分</span><b>5,005</b><small>7,700</small></div>
+          <div><span>30分</span><b>¥1,300</b><small>¥2,000</small></div>
+          <div><span>60分</span><b>¥2,535</b><small>¥3,900</small></div>
+          <div><span>90分</span><b>¥3,770</b><small>¥5,800</small></div>
+          <div><span>120分</span><b>¥5,005</b><small>¥7,700</small></div>
         </div>
       </div>
       <div class="rate">
         <h3 class="name">ヘッドコース<small>ドライヘッドスパ</small></h3>
         <div class="br"><span>もみほぐしを含む</span></div>
         <div class="g">
-          <div><span>30分</span><b>1,820</b><small>2,800</small></div>
-          <div><span>60分</span><b>2,795</b><small>4,300</small></div>
-          <div><span>90分</span><b>4,030</b><small>6,200</small></div>
-          <div><span>120分</span><b>5,265</b><small>8,100</small></div>
+          <div><span>30分</span><b>¥1,820</b><small>¥2,800</small></div>
+          <div><span>60分</span><b>¥2,795</b><small>¥4,300</small></div>
+          <div><span>90分</span><b>¥4,030</b><small>¥6,200</small></div>
+          <div><span>120分</span><b>¥5,265</b><small>¥8,100</small></div>
         </div>
       </div>
       <div class="rate">
         <h3 class="name">フットコース<small>足つぼ・リフレクソロジー</small></h3>
         <div class="br"><span>もみほぐしを含む</span></div>
         <div class="g">
-          <div><span>30分</span><b>1,950</b><small>3,000</small></div>
-          <div><span>60分</span><b>3,185</b><small>4,900</small></div>
-          <div><span>90分</span><b>4,420</b><small>6,800</small></div>
-          <div><span>120分</span><b>5,655</b><small>8,700</small></div>
+          <div><span>30分</span><b>¥1,950</b><small>¥3,000</small></div>
+          <div><span>60分</span><b>¥3,185</b><small>¥4,900</small></div>
+          <div><span>90分</span><b>¥4,420</b><small>¥6,800</small></div>
+          <div><span>120分</span><b>¥5,655</b><small>¥8,700</small></div>
         </div>
       </div>
       <div class="rate">
         <h3 class="name">フルコース<small>3つの組み合わせ</small></h3>
         <div class="g g-from-90">
-          <div><span>90分</span><b>4,680</b><small>7,200</small></div>
-          <div><span>120分</span><b>5,915</b><small>9,100</small></div>
+          <div><span>90分</span><b>¥4,680</b><small>¥7,200</small></div>
+          <div><span>120分</span><b>¥5,915</b><small>¥9,100</small></div>
         </div>
       </div>
     </div>
@@ -511,7 +516,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
   <section class="sec" id="details">
     <div class="wrap">
       <h2>募集要項</h2>
-      <dl class="info stack">
+      <dl class="info">
         <div><dt>職種</dt><dd>リラクゼーションセラピスト</dd></div>
         <div><dt>契約の種類</dt><dd>業務委託</dd></div>
         <div><dt>仕事内容</dt><dd>次の施術と、担当するお客様の接客、およびそれに付随する業務をお任せします。<ul><li>もみほぐし</li><li>ドライヘッドスパ</li><li>足つぼ・リフレクソロジー（オイル使用）</li></ul></dd></div>
@@ -530,7 +535,7 @@ main #form-msg { margin-top: 0; color: var(--err); }
       <h2>店舗情報</h2>
       <div class="salon">
         <div>
-          <dl class="info stack">
+          <dl class="info">
             <div><dt>店名</dt><dd>揉蔵</dd></div>
             <div><dt>住所</dt><dd>〒324-0041<br>栃木県大田原市本町1丁目2701-11<br>サイトー・バルコニー107</dd></div>
             <div><dt>目印</dt><dd>ハローワーク大田原の近く</dd></div>
