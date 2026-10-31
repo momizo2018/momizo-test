@@ -115,11 +115,8 @@ body {
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
-/* 日本語は文節で折り返す。見出しは行の長さをそろえる。固有名詞と数字のまとまりは .nb で途中で切らない */
-.nb { white-space: nowrap; }
-h1, h2, h3, p, dd, li, small { word-break: auto-phrase; }
-p, dd, li, small { text-wrap: pretty; }
-h1, h2, h3 { text-wrap: balance; font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
+/* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
+h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
@@ -149,9 +146,10 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .brand-name { font-size: 1em; line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
 .brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
-/* 営業状況：点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。スクリプトが中身を入れてから出す */
-.status { display: none; align-items: baseline; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
-.status.on { display: flex; }
+/* 営業状況：2段。上に点＋いまの状態（ink-2）、下に閉まる時刻か次に開く日時（soft）。右寄せで、間0（ロゴの2段と同じ）。
+   スクリプトが中身を入れてから出す */
+.status { display: none; justify-items: end; font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
+.status.on { display: grid; }
 .status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
 .status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
 .status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
@@ -248,7 +246,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background-color: var(--white-50); color: var(--ink-2); text-decoration: none;
   transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); word-break: auto-phrase; text-wrap: balance; }
+.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); }
 .line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid var(--ink-12); border-radius: 50%; background: var(--white-80); line-height: var(--lh-none); color: var(--muted); }
 .line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .line:hover { background-color: var(--white); border-color: var(--ink-20); transform: translateY(var(--lift)); } }
@@ -426,14 +424,14 @@ main #form-msg { margin-top: 0; color: var(--err); }
     <a href="../">トップ</a><a href="../menu/">コースと料金</a><span aria-current="page">セラピスト募集</span>
   </nav>
   <nav class="nav" aria-label="このページの目次">
-    <a href="#reward">報酬早見表</a><a href="#workstyle">働き方</a><a href="#details">募集要項</a><a href="#salon">店舗情報</a><a href="#apply">ご応募</a>
+    <a href="#reward">報酬早見表</a><a href="#workstyle">働き方</a><a href="#details">募集要項</a><a href="#salon">店舗情報</a>
   </nav>
 </header>
 
 <main>
   <!-- ===== ページの題 ===== -->
   <div class="page-title">
-    <h1>リラクゼーション<span class="nb">セラピスト募集</span></h1>
+    <h1>リラクゼーションセラピスト募集</h1>
     <p>他店でのご経験をそのまま活かせます。</p>
   </div>
   <ul class="tags"><li>業務委託</li><li>インボイス登録不要</li><li>経験者</li><li>資格不要</li><li>年齢・性別不問</li><li>履歴書不要</li></ul>
