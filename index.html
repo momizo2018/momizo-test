@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f4f2ed">
 <meta name="format-detection" content="telephone=no">
 <title>大田原市のリラクゼーションサロン | 揉蔵</title>
-<meta name="description" content="しっかりほぐして、気軽に通える。大田原市のリラクゼーションサロン、揉蔵（もみぞう）です。もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。">
+<meta name="description" content="大田原市のリラクゼーションサロン、揉蔵（もみぞう）です。もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,6 +61,11 @@
   --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
   --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
   --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、フッターの各段の間 */
+  --gap-logo: var(--sp-12);     /* 48 ヘッダーのロゴ→ページの行（ロゴを独立させる） */
+
+  /* 枠の内側（2種類） */
+  --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
+  --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
 
   /* 横の位置（幅480px以下で変わる） */
   --page-pad: var(--sp-4);
@@ -70,7 +75,7 @@
 
   /* 部品の大きさ */
   --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ（固有値） */
-  --label-col: var(--sp-16);    /* 64 表の項目欄の幅（固有値） */
+  --label-col: var(--sp-16);    /* 64 フォームの曜日の欄の幅（固有値） */
   --arrow: var(--sp-8);         /* 32 矢印の丸 */
 
   /* 線・角丸・影 */
@@ -80,7 +85,6 @@
 
   /* 文字 */
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --font-latin: "Inter", sans-serif;
   --fw-regular: 400; --fw-semibold: 600;
   --fs-sm: 14px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
   --fs-md: 16px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
@@ -108,20 +112,19 @@
 
 /* ---------- 土台 ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); min-height: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); }
 body {
   font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
   color: var(--ink-2); background: var(--bg-page);
-  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
 /* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
-h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
+h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
-.wrap { width: 100%; }
 section[id], article[id] { scroll-margin-top: var(--page-group); }
 
 /* ---------- カード ---------- */
@@ -139,14 +142,14 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 .head .brand { font-size: var(--fs-logo); }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
-.head-pages { margin-top: var(--sp-12); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
+.head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 
-/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。間0。
+/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。2行の間は relaxation salon の -.35em 詰める（ロゴの中の値。大きさを変えても同じ比率）。
    1つの塊として大きさを変え、relaxation salon は momizo の0.6倍。
    フッターは relaxation salon を小さい文字と同じ14pxにそろえ、momizo はその逆算（14÷0.6≒23.3）。ヘッダーは relaxation salon を20pxにそろえ、momizo はその逆算（20÷0.6≒33.3） */
-.brand { display: grid; font-size: calc(var(--fs-sm) / .6); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { font-size: 1em; line-height: var(--lh-ui); color: var(--ink-2); }
-.brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
+.brand { display: grid; font-size: calc(var(--fs-sm) / .6); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { line-height: var(--lh-ui); }
+.brand-sub { margin-top: -.35em; font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
 /* 営業状況：ヘッダーのいちばん上、右端に1行。点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。
    →8→ ロゴ。中身はスクリプトが入れてから見せる（行の高さは先に取っておき、出たときにロゴが動かないようにする） */
@@ -195,7 +198,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
 .dock a {
   position: relative; display: grid; place-content: center;
-  min-height: var(--size-control); font-size: var(--fs-md); font-weight: var(--fw-semibold); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap; color: var(--ink-2);
+  min-height: var(--size-control); font-weight: var(--fw-semibold); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
 .dock a + a::before { content: ""; position: absolute; left: 0; top: 50%; height: var(--sp-6); margin-top: calc(var(--sp-6) / -2); width: var(--bw); background: var(--ink-12); }
@@ -208,7 +211,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .foot-body { padding-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
 .foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 .foot-ext { margin-top: var(--gap-head); }   /* 線の上下16。押せる範囲は線のところで接する */
-.footer { margin-top: var(--gap-section); font-family: var(--font-latin); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
+.footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ===== 共通：土台ここまで ===== */
@@ -221,7 +224,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
    画像がないときは仮画像の面 */
 .ph {
   --ph-h: 280px;
-  display: flex; gap: var(--sp-2); height: var(--ph-h);
+  display: flex; gap: var(--gap-item); height: var(--ph-h);
   margin-inline: calc(var(--card-pad-x) * -1);
   overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; contain: inline-size;
   scrollbar-width: none;
@@ -270,9 +273,10 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 /* ===== 共通：ボタンと補足ここまで ===== */
 
 /* ===== 共通：項目と内容の表・地図・線のボタン ===== */
-/* 項目と内容の表：左に項目名（soft）、右に内容。各行の下と表の上に区切り線 */
+/* 項目と内容の表：項目名（soft）の下に内容。各行の下と表の上に区切り線。
+   項目名を上に置くので、画面が狭くても内容の幅を取れる */
 .info { display: grid; border-top: var(--bw) solid var(--ink-12); }
-.info > div { display: grid; grid-template-columns: var(--label-col) minmax(0, 1fr); align-items: baseline; gap: 0 var(--gap-head); padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
+.info > div { display: grid; gap: var(--gap-tight); padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
 .info dt { color: var(--soft); }
 .hours dd { font-variant-numeric: tabular-nums; }
 
@@ -283,8 +287,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 /* 線のボタン（外部サイトへのリンク）：左に名前、右に矢印の丸 */
 .line {
   display: flex; align-items: center; justify-content: space-between; gap: var(--gap-head);
-  min-height: var(--size-control); padding: var(--gap-list) var(--gap-head);
-  border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background-color: var(--white-50); color: var(--ink-2); text-decoration: none;
+  min-height: var(--size-control); padding: var(--pad-part);
+  border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background-color: var(--white-50); text-decoration: none;
   transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
 .action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); }
@@ -304,8 +308,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 /* ---------- ヒーロー：本文 → お知らせ → 写真。h1 は読み上げ用に隠す ---------- */
 .hero { padding-top: var(--page-group); }
 /* ヒーローの1行：サイト全体のメッセージ。見出しと同じ20px・ink-2 →16→ 本文 */
-.hero-lead { font-size: var(--fs-lg); line-height: var(--lh-ui); color: var(--ink-2); }
-.hero-lead + p { margin-top: var(--gap-head); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }   /* 画面には出さず、読み上げと検索にだけ渡す */
 .hero-ph { margin-top: var(--page-group); animation: rise var(--dur-enter) var(--ease-out) both; }
 @keyframes rise { from { opacity: 0; translate: 0 var(--enter-y); } to { opacity: 1; translate: 0 0; } }
@@ -314,16 +316,15 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
    縁は ink-12、角丸16、面は white-80 → accent-08 の淡いグラデーション。
    見出しの点は営業状況と同じ形：お知らせがあるときは accent に淡い輪、ないときは faint。
    data-state：loading（1行分の空き）→ list（お知らせ）か empty（公式LINEへの一言） ---------- */
-.notice { margin-top: var(--gap-section); padding: var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: linear-gradient(160deg, var(--white-80) 0%, var(--accent-08) 100%); }
+.notice { margin-top: var(--gap-section); padding: var(--pad-box); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: linear-gradient(160deg, var(--white-80) 0%, var(--accent-08) 100%); }
 .notice h2 { display: flex; align-items: center; gap: var(--gap-item); margin: 0 0 var(--gap-list); font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 .notice h2::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); transition: background-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
 .notice[data-state="list"] h2::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
 .notice-list { list-style: none; }
-.notice-list li { color: var(--ink-2); }
 .notice-list li + li { margin-top: var(--gap-list); padding-top: var(--gap-list); border-top: var(--bw) solid var(--ink-12); }
 .notice-list small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }
 .notice-empty { color: var(--muted); }
-.notice-empty a { color: inherit; text-decoration-color: var(--ink-20); text-underline-offset: .3em; }
+.notice-empty a { text-decoration-color: var(--ink-20); text-underline-offset: .3em; }
 @media (hover: hover) { .notice-empty a:hover { color: var(--ink-2); } }
 .notice:not([data-state="list"]) .notice-list, .notice:not([data-state="empty"]) .notice-empty { display: none; }
 .notice[data-state="loading"]::after { content: ""; display: block; height: calc(var(--fs-md) * var(--lh-text)); }
@@ -360,7 +361,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   "@type": "DaySpa",
   "name": "揉蔵",
   "alternateName": "relaxation salon momizo",
-  "description": "しっかりほぐして、気軽に通える。もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しているリラクゼーションサロンです。",
+  "description": "もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しているリラクゼーションサロンです。",
   "url": "https://momizo2018.github.io/momizo-site/",
   "telephone": "+81-287-33-9178",
   "priceRange": "¥2,000〜¥9,100",
@@ -402,7 +403,6 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   <section class="hero">
     <div class="wrap">
       <h1 class="vh">揉蔵（もみぞう）</h1>
-      <p class="hero-lead">しっかりほぐして、気軽に通える。</p>
       <p>大田原市のリラクゼーションサロン、揉蔵（もみぞう）です。<br>もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。</p>
       <section class="notice" id="notice" data-state="loading" aria-labelledby="notice-h" aria-live="polite">
         <h2 id="notice-h">お知らせ</h2>
@@ -428,7 +428,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
           </div>
           <div>
             <h3>通うほど、お得に。</h3>
-            <p>割引クーポンやスタンプカードもご用意しています。</p>
+            <p>クーポンやスタンプカードなどをご用意しています。</p>
           </div>
         </div>
         <ul class="facts">
@@ -447,7 +447,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
       <div class="visit">
         <div>
           <h3>クーポン</h3>
-          <p>期間限定の割引クーポンや、公式LINEの友だち限定クーポンを、その時々でご用意しています。ご来店の前に、使えるクーポンがないか確かめてみてください。</p>
+          <p>公式LINEで、どなたでも使えるクーポンと、友だち限定のクーポンを、その時々でご用意しています。ご来店の前に、使えるクーポンがないか確かめてみてください。</p>
           <div class="links">
             <!-- 公式LINEのアカウントページ。全員向けのクーポンが載っている。ブラウザでそのまま見られ、クーポンが替わってもリンクは切れない -->
             <a class="line" href="https://page.line.me/cvj7583f" target="_blank" rel="noopener"><span class="action-copy">公開中のクーポン</span><span class="line-arrow" aria-hidden="true">↗</span></a>
@@ -460,8 +460,8 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
         <div>
           <h3>スタンプカード</h3>
           <div class="ph stamp-ph"><img src="assets/img/stamp.webp" alt="スタンプカード。表の絵と、裏の12マス" width="960" height="560" loading="lazy" decoding="async"></div>
-          <p>施術30分ごとに、スタンプを1つ押します。60分なら2つ、120分なら4つです。12個たまったカードをお持ちいただくと、次回以降のお会計から500円OFFになります。120分のコースなら、3回でたまります。</p>
-          <p class="note">スタンプがたまった日のお会計には使えません。ほかの特典とは併用できません。有効期限は、最後のご利用日から1年です。</p>
+          <p>施術30分ごとに、スタンプを1つ押します。60分なら2つ、120分なら4つです。12個たまったカードは、500円の割引券としてお使いいただけます。120分のコースなら、3回でたまります。</p>
+          <p class="note">12個目のスタンプを押した日のお会計には使えません。ほかの特典とは併用できません。有効期限は、最後のご利用日から1年です。</p>
         </div>
       </div>
     </div>
