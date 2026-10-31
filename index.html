@@ -117,11 +117,8 @@ body {
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
-/* 日本語は文節で折り返す。見出しは行の長さをそろえる。固有名詞と数字のまとまりは .nb で途中で切らない */
-.nb { white-space: nowrap; }
-h1, h2, h3, p, dd, li, small { word-break: auto-phrase; }
-p, dd, li, small { text-wrap: pretty; }
-h1, h2, h3 { text-wrap: balance; font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
+/* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
+h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
@@ -151,9 +148,10 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .brand-name { font-size: 1em; line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
 .brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
-/* 営業状況：点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。スクリプトが中身を入れてから出す */
-.status { display: none; align-items: baseline; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
-.status.on { display: flex; }
+/* 営業状況：2段。上に点＋いまの状態（ink-2）、下に閉まる時刻か次に開く日時（soft）。右寄せで、間0（ロゴの2段と同じ）。
+   スクリプトが中身を入れてから出す */
+.status { display: none; justify-items: end; font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
+.status.on { display: grid; }
 .status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
 .status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
 .status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
@@ -285,7 +283,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background-color: var(--white-50); color: var(--ink-2); text-decoration: none;
   transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); word-break: auto-phrase; text-wrap: balance; }
+.action-copy { min-width: 0; line-height: var(--lh-ui); font-weight: var(--fw-semibold); }
 .line-arrow { flex: 0 0 var(--arrow); width: var(--arrow); height: var(--arrow); display: grid; place-items: center; border: var(--bw) solid var(--ink-12); border-radius: 50%; background: var(--white-80); line-height: var(--lh-none); color: var(--muted); }
 .line:active { transform: scale(var(--press)); transition-duration: var(--dur-press); }
 @media (hover: hover) { .line:hover { background-color: var(--white); border-color: var(--ink-20); transform: translateY(var(--lift)); } }
@@ -302,7 +300,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 /* ---------- ヒーロー：本文 → お知らせ → 写真。h1 は読み上げ用に隠す ---------- */
 .hero { padding-top: var(--page-group); }
 /* ヒーローの1行：サイト全体のメッセージ。見出しと同じ20px・ink-2 →16→ 本文 */
-.hero-lead { font-size: var(--fs-lg); line-height: var(--lh-ui); color: var(--ink-2); text-wrap: balance; }
+.hero-lead { font-size: var(--fs-lg); line-height: var(--lh-ui); color: var(--ink-2); }
 .hero-lead + p { margin-top: var(--gap-head); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }   /* 画面には出さず、読み上げと検索にだけ渡す */
 .hero-ph { margin-top: var(--page-group); animation: rise var(--dur-enter) var(--ease-out) both; }
@@ -401,7 +399,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
     <div class="wrap">
       <h1 class="vh">揉蔵（もみぞう）</h1>
       <p class="hero-lead">しっかりほぐして、気軽に通える。</p>
-      <p>大田原市のリラクゼーションサロン、<span class="nb">揉蔵（もみぞう）です。</span><br>もみほぐしを中心に、ドライヘッドスパ、<span class="nb">足つぼ・リフレクソロジー</span>のコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。</p>
+      <p>大田原市のリラクゼーションサロン、揉蔵（もみぞう）です。<br>もみほぐしを中心に、ドライヘッドスパ、足つぼ・リフレクソロジーのコースをご用意しています。日々の疲れを感じたときに、気軽にお立ち寄りください。</p>
       <section class="notice" id="notice" data-state="loading" aria-labelledby="notice-h" aria-live="polite">
         <h2 id="notice-h">お知らせ</h2>
         <ul class="notice-list" id="notices"></ul>
@@ -422,7 +420,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
           </div>
           <div>
             <h3>通いやすい料金で。</h3>
-            <p><span class="nb">30分2,000円</span>から。短い時間でも、気になるところをしっかりほぐします。</p>
+            <p>30分2,000円から。短い時間でも、気になるところをしっかりほぐします。</p>
           </div>
           <div>
             <h3>通うほど、お得に。</h3>
@@ -445,20 +443,20 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
       <div class="visit">
         <div>
           <h3>クーポン</h3>
-          <p>期間限定の割引クーポンや、<span class="nb">公式LINE</span>の友だち限定クーポンを、その時々でご用意しています。ご来店の前に、使えるクーポンがないか確かめてみてください。</p>
+          <p>期間限定の割引クーポンや、公式LINEの友だち限定クーポンを、その時々でご用意しています。ご来店の前に、使えるクーポンがないか確かめてみてください。</p>
           <div class="links">
             <!-- 公式LINEのアカウントページ。全員向けのクーポンが載っている。ブラウザでそのまま見られ、クーポンが替わってもリンクは切れない -->
             <a class="line" href="https://page.line.me/cvj7583f" target="_blank" rel="noopener"><span class="action-copy">公開中のクーポン</span><span class="line-arrow" aria-hidden="true">↗</span></a>
             <!-- 公式LINEの友だち追加のリンク（LINE ID @cvj7583f。@ は %40 にする）。
                  スマホ：友だちでなければプロフィール（友だち追加）、友だちならトークが開く。パソコン：Web版プロフィールかQRコードが出る -->
-            <a class="line" href="https://line.me/R/ti/p/%40cvj7583f" target="_blank" rel="noopener"><span class="action-copy"><span class="nb">公式LINE</span>の友だち限定クーポン</span><span class="line-arrow" aria-hidden="true">↗</span></a>
+            <a class="line" href="https://line.me/R/ti/p/%40cvj7583f" target="_blank" rel="noopener"><span class="action-copy">公式LINEの友だち限定クーポン</span><span class="line-arrow" aria-hidden="true">↗</span></a>
           </div>
           <p class="note">内容は、リンク先でご確認ください。</p>
         </div>
         <div>
           <h3>スタンプカード</h3>
           <div class="ph stamp-ph"><img src="assets/img/stamp.webp" alt="スタンプカード。表の絵と、裏の12マス" width="960" height="560" loading="lazy" decoding="async"></div>
-          <p>施術30分ごとに、スタンプを1つ押します。60分なら2つ、120分なら4つです。12個たまったカードをお持ちいただくと、次回以降のお会計から<span class="nb">500円OFF</span>になります。120分のコースなら、3回でたまります。</p>
+          <p>施術30分ごとに、スタンプを1つ押します。60分なら2つ、120分なら4つです。12個たまったカードをお持ちいただくと、次回以降のお会計から500円OFFになります。120分のコースなら、3回でたまります。</p>
           <p class="note">スタンプがたまった日のお会計には使えません。ほかの特典とは併用できません。有効期限は、最後のご利用日から1年です。</p>
         </div>
       </div>
@@ -482,9 +480,9 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
       <h2>アクセス</h2>
       <div class="access">
         <dl class="info">
-          <div><dt>住所</dt><dd>〒324-0041<br>栃木県大田原市<span class="nb">本町1丁目2701-11</span><br><span class="nb">サイトー・バルコニー107</span></dd></div>
+          <div><dt>住所</dt><dd>〒324-0041<br>栃木県大田原市本町1丁目2701-11<br>サイトー・バルコニー107</dd></div>
           <div><dt>目印</dt><dd>ハローワーク大田原の近く</dd></div>
-          <div><dt>支払い</dt><dd>現金のほか、以下に対応<span class="pay"><b>クレジットカード</b>Visa、Mastercard、JCB、<span class="nb">American Express</span>、<span class="nb">Diners Club</span>、Discover</span><span class="pay"><b>電子マネー</b><span class="nb">交通系IC</span>、iD、QUICPay</span><span class="pay"><b>QRコード決済</b>PayPay、d払い、楽天ペイ、<span class="nb">au PAY</span> など</span></dd></div>
+          <div><dt>支払い</dt><dd>現金のほか、以下に対応<span class="pay"><b>クレジットカード</b>Visa、Mastercard、JCB、American Express、Diners Club、Discover</span><span class="pay"><b>電子マネー</b>交通系IC、iD、QUICPay</span><span class="pay"><b>QRコード決済</b>PayPay、d払い、楽天ペイ、au PAY など</span></dd></div>
         </dl>
         <div>
           <div class="mapbox">
