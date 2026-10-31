@@ -117,11 +117,8 @@ body {
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
-/* 日本語は文節で折り返す。見出しは行の長さをそろえる。固有名詞と数字のまとまりは .nb で途中で切らない */
-.nb { white-space: nowrap; }
-h1, h2, h3, p, dd, li, small { word-break: auto-phrase; }
-p, dd, li, small { text-wrap: pretty; }
-h1, h2, h3 { text-wrap: balance; font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
+/* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
+h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
@@ -151,9 +148,10 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .brand-name { font-size: 1em; line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
 .brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
-/* 営業状況：点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。スクリプトが中身を入れてから出す */
-.status { display: none; align-items: baseline; gap: var(--gap-item); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
-.status.on { display: flex; }
+/* 営業状況：2段。上に点＋いまの状態（ink-2）、下に閉まる時刻か次に開く日時（soft）。右寄せで、間0（ロゴの2段と同じ）。
+   スクリプトが中身を入れてから出す */
+.status { display: none; justify-items: end; font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
+.status.on { display: grid; }
 .status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
 .status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
 .status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
@@ -300,7 +298,7 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
   <div class="page-title">
     <h1>コースと料金</h1>
     <p class="lead">選べるコース、続けやすい価格。</p>
-    <p>もみほぐし、ドライヘッドスパ、<span class="nb">足つぼ・リフレクソロジー</span>の3つの施術を、単独や組み合わせでご用意しています。気になるところだけを短くほぐしたい方から、全身をじっくりケアしたい方まで、ご希望やお疲れに合わせてお選びください。時間は30分から120分までで、選べる時間はコースによって異なります。</p>
+    <p>もみほぐし、ドライヘッドスパ、足つぼ・リフレクソロジーの3つの施術を、単独や組み合わせでご用意しています。気になるところだけを短くほぐしたい方から、全身をじっくりケアしたい方まで、ご希望やお疲れに合わせてお選びください。時間は30分から120分までで、選べる時間はコースによって異なります。</p>
   </div>
 
   <div class="courses">
@@ -322,10 +320,10 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
       <p>オイルを使わずに、頭から首、胸元をほぐすコースです。お好みで、お顔もほぐします。頭まわりをじっくりケアしたい方や、ゆっくりリラックスしたい方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
       <p class="unit">税込・円</p>
       <ul class="prices">
-          <li><span class="t">30分<small><span class="nb">ドライヘッドスパのみ</span></small></span><b>2,800</b></li>
-          <li><span class="t">60分<small><span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし45分</span></small></span><b>4,300</b></li>
-          <li><span class="t">90分<small><span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし75分</span></small></span><b>6,200</b></li>
-          <li><span class="t">120分<small><span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし105分</span></small></span><b>8,100</b></li>
+          <li><span class="t">30分<small>ドライヘッドスパのみ</small></span><b>2,800</b></li>
+          <li><span class="t">60分<small>ドライヘッドスパ15分、もみほぐし45分</small></span><b>4,300</b></li>
+          <li><span class="t">90分<small>ドライヘッドスパ15分、もみほぐし75分</small></span><b>6,200</b></li>
+          <li><span class="t">120分<small>ドライヘッドスパ15分、もみほぐし105分</small></span><b>8,100</b></li>
       </ul>
     </article>
     <article class="course" id="foot">
@@ -334,20 +332,20 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
       <p>足裏を中心に、オイルを使ってほぐすコースです。立ち仕事や歩くことが多い方、足の疲れやだるさが気になる方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
       <p class="unit">税込・円</p>
       <ul class="prices">
-          <li><span class="t">30分<small><span class="nb">足つぼ・リフレクソロジーのみ</span></small></span><b>3,000</b></li>
-          <li><span class="t">60分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">もみほぐし30分</span></small></span><b>4,900</b></li>
-          <li><span class="t">90分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">もみほぐし60分</span></small></span><b>6,800</b></li>
-          <li><span class="t">120分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">もみほぐし90分</span></small></span><b>8,700</b></li>
+          <li><span class="t">30分<small>足つぼ・リフレクソロジーのみ</small></span><b>3,000</b></li>
+          <li><span class="t">60分<small>足つぼ・リフレクソロジー30分、もみほぐし30分</small></span><b>4,900</b></li>
+          <li><span class="t">90分<small>足つぼ・リフレクソロジー30分、もみほぐし60分</small></span><b>6,800</b></li>
+          <li><span class="t">120分<small>足つぼ・リフレクソロジー30分、もみほぐし90分</small></span><b>8,700</b></li>
       </ul>
     </article>
     <article class="course" id="full">
       <div class="ph"><img src="../assets/img/course-foot.webp" alt="足つぼ・リフレクソロジーの様子" width="960" height="560" loading="lazy" decoding="async"><img src="../assets/img/course-head.webp" alt="ドライヘッドスパの様子" width="960" height="560" loading="lazy" decoding="async"><img src="../assets/img/course-body.webp" alt="もみほぐしの様子" width="960" height="560" loading="lazy" decoding="async"></div>
       <h2 class="name">フルコース<small>3つの組み合わせ</small></h2>
-      <p><span class="nb">足つぼ・リフレクソロジー</span>、ドライヘッドスパ、もみほぐしの3つを組み合わせたコースです。90分から、頭から足まで全身をじっくりケアします。ゆったりとした時間をお過ごしください。</p>
+      <p>足つぼ・リフレクソロジー、ドライヘッドスパ、もみほぐしの3つを組み合わせたコースです。90分から、頭から足まで全身をじっくりケアします。ゆったりとした時間をお過ごしください。</p>
       <p class="unit">税込・円</p>
       <ul class="prices">
-          <li><span class="t">90分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし45分</span></small></span><b>7,200</b></li>
-          <li><span class="t">120分<small><span class="nb">足つぼ・リフレクソロジー30分</span>、<span class="nb">ドライヘッドスパ15分</span>、<span class="nb">もみほぐし75分</span></small></span><b>9,100</b></li>
+          <li><span class="t">90分<small>足つぼ・リフレクソロジー30分、ドライヘッドスパ15分、もみほぐし45分</small></span><b>7,200</b></li>
+          <li><span class="t">120分<small>足つぼ・リフレクソロジー30分、ドライヘッドスパ15分、もみほぐし75分</small></span><b>9,100</b></li>
       </ul>
     </article>
   </div>
