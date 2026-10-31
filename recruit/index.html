@@ -28,8 +28,8 @@
 
    規則
    1. 間隔は 4・8・12・16・24・32・48・64・96。関係が近いものほど狭く、となりの役割とは1段以上の差をつける
-   2. 文字は 12・14・20（例外：ヘッダーのロゴ 28、求人の「65%」64）。太さは 400 が基本。600 は小見出し・ボタンだけ
-      行間は 1・1.4・1.8。字間は基本 .04em
+   2. 文字は 14・16・20。本文は16（例外：ヘッダーのロゴ 約33.3、求人の「65%」72）。太さは 400 が基本。600 は小見出し・ボタンだけ
+      行間は 1・1.4・1.8。字間は指定せず、書体のまま
    3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）と著作権表示だけ
    4. 写真の枠は高さ280で固定して横にスクロール。地図は 3:2
    5. 画面幅で値が変わるのは 480px 以下の1か所だけ
@@ -80,14 +80,13 @@
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
   --font-latin: "Inter", sans-serif;
   --fw-regular: 400; --fw-semibold: 600;
-  --fs-sm: 12px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
-  --fs-md: 14px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
-  --fs-lg: 20px;     /* フッターのロゴ、セクション見出し、コース名、料金 */
-  --fs-logo: 28px;   /* 固有値：ヘッダーのロゴ。下のリンクの行に埋もれないよう、ここだけ大きく */
+  --fs-sm: 14px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
+  --fs-md: 16px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
+  --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
+  --fs-logo: calc(var(--fs-lg) / .6);   /* ヘッダーのロゴ（momizo）：relaxation salon を見出しと同じ20pxにそろえた逆算（20÷0.6≒33.3） */
   --lh-none: 1;      /* 1行の部品 */
   --lh-ui: 1.4;      /* 見出し、ボタン */
   --lh-text: 1.8;    /* 文章 */
-  --ls-latin: -.04em; --ls-base: .04em;
 
   /* 動き */
   --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
@@ -109,7 +108,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); min-height: 100%; }
 body {
-  font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text); letter-spacing: var(--ls-base);
+  font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
   color: var(--ink-2); background: var(--bg-page);
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden;
   min-height: 100svh; display: grid; place-items: start center;
@@ -133,23 +132,28 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)) scale(.99); } to { opacity: 1; transform: none; } }
 
-/* ---------- ヘッダー：ロゴ（左）と営業状況（右）→ ページの行 → 区切り線 → そのページのナビ ---------- */
-/* 営業状況はロゴの下の行（relaxation salon）の文字の下の線にそろえる */
-.head .wrap { display: flex; align-items: flex-end; align-items: last baseline; justify-content: space-between; gap: var(--gap-head); }
+/* ---------- ヘッダー：営業状況（右上に1行）→ ロゴ → ページの行 → 区切り線 → そのページのナビ ---------- */
+/* 営業状況はロゴと別の行に置くので、どの幅でもロゴとぶつからない */
+.head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 .head .brand { font-size: var(--fs-logo); }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
 .head-pages { margin-top: var(--sp-12); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 
-/* ロゴ：momizo（400・-.04em・ink-2）の下に relaxation salon（soft）。間0。
-   1つの塊として大きさを変え、relaxation salon は momizo の0.6倍（フッター20→12、ヘッダー28→16.8） */
-.brand { display: grid; font-size: var(--fs-lg); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { font-size: 1em; line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
+/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。間0。
+   1つの塊として大きさを変え、relaxation salon は momizo の0.6倍。
+   フッターは relaxation salon を小さい文字と同じ14pxにそろえ、momizo はその逆算（14÷0.6≒23.3）。ヘッダーは relaxation salon を20pxにそろえ、momizo はその逆算（20÷0.6≒33.3） */
+.brand { display: grid; font-size: calc(var(--fs-sm) / .6); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { font-size: 1em; line-height: var(--lh-ui); color: var(--ink-2); }
 .brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
-/* 営業状況：2段。上に点＋いまの状態（ink-2）、下に閉まる時刻か次に開く日時（soft）。右寄せで、間0（ロゴの2段と同じ）。
-   スクリプトが中身を入れてから出す */
-.status { display: none; justify-items: end; font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
-.status.on { display: grid; }
+/* 営業状況：ヘッダーのいちばん上、右端に1行。点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。
+   →8→ ロゴ。中身はスクリプトが入れてから見せる（行の高さは先に取っておき、出たときにロゴが動かないようにする） */
+.status {
+  order: -1; justify-self: end; margin-bottom: var(--gap-item);
+  display: flex; align-items: baseline; gap: var(--gap-item); min-height: calc(var(--fs-sm) * var(--lh-ui));
+  font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); visibility: hidden;
+}
+.status.on { visibility: visible; }
 .status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
 .status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
 .status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
@@ -259,34 +263,33 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
   --page-group: var(--sp-16);     /* 64 ナビ→最初の内容 */
   --page-section: var(--sp-24);   /* 96 セクションどうし、最後の内容→フッター */
   --err: #b3261e;                 /* 入力の誤り（求人ページのフォームだけ） */
-  --fs-display: 64px;             /* 固有値：「65%」の数字。ページで一番伝えたい数字なので、ここだけ大きく */
-  --fs-input: 16px;               /* 固有値：フォームの入力欄の文字。16px未満だと、iPhone で欄をタップしたときに画面が拡大されるため */
+  --fs-display: 72px;             /* 固有値：「65%」の数字。ページで一番伝えたい数字なので、ここだけ大きく */
 }
 
 /* ---------- ページの題：h1 →32→ 本文 →24→ 特徴の札 →32→「65%」の箱 ---------- */
 .page-title { padding-top: var(--page-group); }
-/* 特徴の札：細い線（ink-12）の角丸の札。面は white-50、文字は12・muted */
+/* 特徴の札：細い線（ink-12）の角丸の札。面は white-50、文字は14・muted */
 .tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--gap-item); margin-top: var(--gap-block); }
 .tags li { padding: var(--sp-1) var(--gap-list); border: var(--bw) solid var(--ink-12); border-radius: var(--r-pill); background: var(--white-50); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
-/* 「65%」の箱：強調の文と同じ accent-08 の面。数字だけ固有値の64px */
+/* 「65%」の箱：強調の文と同じ accent-08 の面。数字だけ固有値の72px */
 .big { margin-top: var(--gap-section); padding: var(--gap-block); border-radius: var(--r-md); background: var(--accent-08); }
 .big .l, .big .t { font-size: var(--fs-sm); color: var(--soft); }
-.big .n { margin-top: var(--gap-item); font-size: var(--fs-display); line-height: var(--lh-none); letter-spacing: var(--ls-latin); font-variant-numeric: tabular-nums; color: var(--ink-2); }
-.big .n small { margin-left: var(--sp-1); font-size: var(--fs-lg); letter-spacing: var(--ls-base); color: var(--soft); }   /* 「%」は20px・soft */
+.big .n { margin-top: var(--gap-item); font-size: var(--fs-display); line-height: var(--lh-none); font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.big .n small { margin-left: var(--sp-1); font-size: var(--fs-lg); color: var(--soft); }   /* 「%」は20px・soft */
 .big .extra { margin-top: var(--gap-head); color: var(--ink-2); }
 .big .t { margin-top: var(--gap-tight); }
 
 /* ---------- 報酬早見表：線で区切ったコースの一覧 ---------- */
 .rate { padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
 .rate:first-of-type { border-top: var(--bw) solid var(--ink-12); }
-/* コース名は小見出しと同じ14・600（セクション見出しより小さく）。下に施術名12・soft */
+/* コース名は小見出しと同じ16・600（セクション見出しより小さく）。下に施術名14・soft */
 .rate .name { display: grid; gap: var(--gap-tight); margin-bottom: var(--gap-head); }
-.rate .name small { font-size: var(--fs-sm); font-weight: var(--fw-regular); letter-spacing: var(--ls-base); color: var(--soft); }
+.rate .name small { font-size: var(--fs-sm); font-weight: var(--fw-regular); color: var(--soft); }
 /* 「もみほぐしを含む」の括弧（60〜120分の上）。横線は文字の高さの中央、両端は下のマスへ下ろす */
 .br { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-item); margin-bottom: var(--sp-1); }
 .br span { grid-column: 2 / 5; display: flex; gap: var(--gap-item); padding-bottom: var(--sp-1); font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--muted); }
 .br span::before, .br span::after { content: ""; flex: 1; margin-top: calc(var(--fs-sm) * var(--lh-ui) / 2); border-top: var(--bw) solid var(--ink-12); }
-.br span::before { margin-right: var(--ls-base); border-left: var(--bw) solid var(--ink-12); }   /* 字間の分を左にも足し、文字を中央に */
+.br span::before { border-left: var(--bw) solid var(--ink-12); }
 .br span::after { border-right: var(--bw) solid var(--ink-12); }
 /* 時間ごとの列（span＝時間、b＝報酬額、small＝表示価格）を中央そろえで縦に積む */
 .g { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-item); }
@@ -296,7 +299,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .g b { font-size: var(--fs-md); font-weight: var(--fw-regular); font-variant-numeric: tabular-nums; color: var(--ink-2); }   /* 報酬額は本文と同じ14で ink-2。大きな数字は「65%」だけ */
 .g-from-90 > :first-child { grid-column: 3; }   /* 90分からのコース（フルコース）は、時間の列をほかとそろえる */
 
-/* ---------- 働き方：特徴の一覧と同じ線の一覧。1文（14・ink-2）→4→ 説明（12・muted） ---------- */
+/* ---------- 働き方：特徴の一覧と同じ線の一覧。1文（16・ink-2）→4→ 説明（14・muted） ---------- */
 .points { list-style: none; border-top: var(--bw) solid var(--ink-12); }
 .points li { display: grid; gap: var(--gap-tight); padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
 .points b { font-weight: var(--fw-regular); line-height: var(--lh-ui); }
@@ -316,23 +319,23 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .form { display: grid; gap: var(--gap-block); }
 .f { display: grid; gap: var(--gap-item); min-width: 0; border: 0; }
 .f > legend { margin-bottom: var(--gap-item); }   /* legend は並びの外なので、間隔を自分で持つ */
-.f > label:not(.sub, .chk), .f > legend { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-semibold); line-height: var(--lh-ui); }   /* 項目名は小見出しと同じ14px・600 */
-.req, .opt { font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); }   /* 必須・任意は札にせず、12pxの文字だけ */
+.f > label:not(.sub, .chk), .f > legend { display: flex; align-items: center; gap: var(--gap-item); font-weight: var(--fw-semibold); line-height: var(--lh-ui); }   /* 項目名は小見出しと同じ16px・600 */
+.req, .opt { font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-ui); }   /* 必須・任意は札にせず、14pxの文字だけ */
 .req { color: var(--accent-hover); }
 .opt { color: var(--soft); }
 main .hint, main .err { font-size: var(--fs-sm); color: var(--soft); }
 main .err { color: var(--err); }
-main .f-err { font-size: var(--fs-sm); color: var(--err); }   /* 項目ごとの誤り：その欄のすぐ下に、12px・err */
+main .f-err { font-size: var(--fs-sm); color: var(--err); }   /* 項目ごとの誤り：その欄のすぐ下に、14px・err */
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-item); }
 .sub { display: grid; gap: var(--gap-tight); min-width: 0; }
 .hint + .sub { margin-top: var(--gap-item); }   /* 項目の中の2つ目のまとまり：前とあわせて16あく */
 .sub > span { font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
 main .age { font-size: var(--fs-sm); color: var(--muted); }
 .age b { font-size: var(--fs-md); font-weight: var(--fw-regular); color: var(--ink-2); }
-/* 入力欄：16px（固有値）、white-80、縁 ink-12、角丸16、内側 上下12・左右16 */
+/* 入力欄：本文と同じ16px（16px未満だと iPhone で拡大されるので、下げない）、white-80、縁 ink-12、角丸16、内側 上下12・左右16 */
 .form input[type=text], .form input[type=tel], .form input[type=email], .form select, .form textarea {
   width: 100%; padding: var(--gap-list) var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-80);
-  color: var(--ink-2); font: inherit; font-size: var(--fs-input); line-height: var(--lh-ui); letter-spacing: inherit;
+  color: var(--ink-2); font: inherit; font-size: var(--fs-md); line-height: var(--lh-ui);
   -webkit-appearance: none; appearance: none; transition: border-color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
 }
 /* セレクトの▼（8px・soft）。▼の左右にも、文字の左と同じ余白 */
@@ -343,7 +346,7 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
   background-position: calc(100% - var(--pad-x) - var(--sp-1)) 50%, calc(100% - var(--pad-x)) 50%; background-size: var(--sp-1) var(--sp-1); background-repeat: no-repeat;
 }
 /* 記入欄：どれも同じ5行分の高さ（固有値）。縦にだけ伸ばせる。いちばん長い記入例（ご経験の4行）が、余白1行を残して収まる */
-.form textarea { min-height: calc(var(--fs-input) * var(--lh-ui) * 5 + var(--gap-list) * 2 + var(--bw) * 2); resize: vertical; }
+.form textarea { min-height: calc(var(--fs-md) * var(--lh-ui) * 5 + var(--gap-list) * 2 + var(--bw) * 2); resize: vertical; }
 .form ::placeholder { color: var(--faint); opacity: 1; }
 .form input:focus, .form select:focus, .form textarea:focus { border-color: var(--accent); background: var(--white); outline: none; }
 .form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
@@ -368,7 +371,7 @@ main .age { font-size: var(--fs-sm); color: var(--muted); }
 .chk { display: flex; align-items: flex-start; gap: var(--gap-list); padding: var(--gap-list) var(--gap-head); border: var(--bw) solid var(--ink-12); border-radius: var(--r-md); background: var(--white-50); line-height: var(--lh-ui); cursor: pointer; }
 .chk input { margin-top: calc((var(--fs-md) * var(--lh-ui) - var(--sp-4)) / 2); }   /* 1行目の高さの中央 */
 .chk .req { margin-left: var(--gap-item); }
-.send { font-family: inherit; letter-spacing: inherit; cursor: pointer; }
+.send { font-family: inherit; cursor: pointer; }
 .send:disabled { opacity: .4; cursor: default; transform: none; }
 main #form-msg { margin-top: 0; color: var(--err); }
 #form-msg:not(:empty) { margin-top: var(--gap-item); }
@@ -690,13 +693,13 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
     const h = H[d];
     let state, detail;
     if (h && now >= h[0] && now < h[1]) {
-      state = "営業中"; detail = t(h[1]) + "まで"; el.classList.add("open");
+      state = "現在営業中"; detail = t(h[1]) + "まで"; el.classList.add("open");
     } else if (h && now < h[0]) {
-      state = "準備中"; detail = t(h[0]) + "から";
+      state = "開店前"; detail = "本日 " + t(h[0]) + "から";
     } else {
       let n = 1; while (!H[(d + n) % 7]) n++;
       const next = (d + n) % 7;
-      state = h ? "営業時間外" : "定休日";
+      state = h ? "営業終了" : "定休日";
       detail = (n === 1 ? "明日" : DAY[next] + "曜") + " " + t(H[next][0]) + "から";
     }
     const b = document.createElement("b"); b.textContent = state;
