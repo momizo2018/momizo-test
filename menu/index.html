@@ -61,6 +61,11 @@
   --gap-head: var(--sp-4);      /* 16 小見出し→中身、線で区切った行の上下、ページの行→区切り線→ナビ */
   --gap-block: var(--sp-6);     /* 24 本文→ボタン、注意書き→ボタン、セクションの説明文→中身 */
   --gap-section: var(--sp-8);   /* 32 セクション見出し→中身、写真→小見出し、本文→お知らせ、フッターの各段の間 */
+  --gap-logo: var(--sp-12);     /* 48 ヘッダーのロゴ→ページの行（ロゴを独立させる） */
+
+  /* 枠の内側（2種類） */
+  --pad-part: var(--sp-3) var(--sp-4);  /* 上下12・左右16 中身が1〜2行の部品：線のボタン、入力欄、強調の文、施術の欄、同意の欄 */
+  --pad-box: var(--sp-6);               /* 24 見出しや複数の中身を収める箱：お知らせ、「65%」の箱、送信完了 */
 
   /* 横の位置（幅480px以下で変わる） */
   --page-pad: var(--sp-4);
@@ -70,7 +75,7 @@
 
   /* 部品の大きさ */
   --size-control: var(--sp-16); /* 64 ボタン・線のボタンの高さ（固有値） */
-  --label-col: var(--sp-16);    /* 64 表の項目欄の幅（固有値） */
+  --label-col: var(--sp-16);    /* 64 フォームの曜日の欄の幅（固有値） */
   --arrow: var(--sp-8);         /* 32 矢印の丸 */
 
   /* 線・角丸・影 */
@@ -80,7 +85,6 @@
 
   /* 文字 */
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  --font-latin: "Inter", sans-serif;
   --fw-regular: 400; --fw-semibold: 600;
   --fs-sm: 14px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
   --fs-md: 16px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
@@ -108,20 +112,19 @@
 
 /* ---------- 土台 ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); min-height: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); }
 body {
   font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
   color: var(--ink-2); background: var(--bg-page);
-  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
   min-height: 100svh; display: grid; place-items: start center;
   padding: calc(env(safe-area-inset-top, 0px) + var(--page-pad)) var(--page-pad) calc(env(safe-area-inset-bottom, 0px) + var(--page-pad));
 }
 /* 文章の折り返しはブラウザにまかせる。手で改行するのは「。」のあとだけ */
-h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); color: var(--ink-2); }
+h1, h2, h3 { font-weight: var(--fw-regular); line-height: var(--lh-ui); }
 main p { color: var(--muted); }
 a { color: inherit; }
 a:focus-visible { outline: var(--focus-w) solid var(--accent); outline-offset: var(--focus-w); }
-.wrap { width: 100%; }
 section[id], article[id] { scroll-margin-top: var(--page-group); }
 
 /* ---------- カード ---------- */
@@ -139,14 +142,14 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 .head .brand { font-size: var(--fs-logo); }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
-.head-pages { margin-top: var(--sp-12); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
+.head-pages { margin-top: var(--gap-logo); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 
-/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。間0。
+/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。2行の間は relaxation salon の -.35em 詰める（ロゴの中の値。大きさを変えても同じ比率）。
    1つの塊として大きさを変え、relaxation salon は momizo の0.6倍。
    フッターは relaxation salon を小さい文字と同じ14pxにそろえ、momizo はその逆算（14÷0.6≒23.3）。ヘッダーは relaxation salon を20pxにそろえ、momizo はその逆算（20÷0.6≒33.3） */
-.brand { display: grid; font-size: calc(var(--fs-sm) / .6); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { font-size: 1em; line-height: var(--lh-ui); color: var(--ink-2); }
-.brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
+.brand { display: grid; font-size: calc(var(--fs-sm) / .6); text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { line-height: var(--lh-ui); }
+.brand-sub { margin-top: -.35em; font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
 /* 営業状況：ヘッダーのいちばん上、右端に1行。点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。
    →8→ ロゴ。中身はスクリプトが入れてから見せる（行の高さは先に取っておき、出たときにロゴが動かないようにする） */
@@ -195,7 +198,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .dock.hide { translate: -50% 100%; opacity: 0; pointer-events: none; }
 .dock a {
   position: relative; display: grid; place-content: center;
-  min-height: var(--size-control); font-size: var(--fs-md); font-weight: var(--fw-semibold); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap; color: var(--ink-2);
+  min-height: var(--size-control); font-weight: var(--fw-semibold); line-height: var(--lh-ui); text-decoration: none; white-space: nowrap;
   transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
 .dock a + a::before { content: ""; position: absolute; left: 0; top: 50%; height: var(--sp-6); margin-top: calc(var(--sp-6) / -2); width: var(--bw); background: var(--ink-12); }
@@ -208,7 +211,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .foot-body { padding-top: var(--gap-section); border-top: var(--bw) solid var(--ink-12); }
 .foot-pages { margin-top: var(--gap-section); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 .foot-ext { margin-top: var(--gap-head); }   /* 線の上下16。押せる範囲は線のところで接する */
-.footer { margin-top: var(--gap-section); font-family: var(--font-latin); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
+.footer { margin-top: var(--gap-section); font-size: var(--fs-sm); line-height: var(--lh-none); color: var(--faint); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 /* ===== 共通：土台ここまで ===== */
@@ -221,7 +224,7 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
    画像がないときは仮画像の面 */
 .ph {
   --ph-h: 280px;
-  display: flex; gap: var(--sp-2); height: var(--ph-h);
+  display: flex; gap: var(--gap-item); height: var(--ph-h);
   margin-inline: calc(var(--card-pad-x) * -1);
   overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; contain: inline-size;
   scrollbar-width: none;
@@ -270,14 +273,17 @@ h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 .course .name { margin: var(--gap-section) 0 0; }
 .course .name + p { margin-top: var(--gap-head); }
 
-/* ---------- 料金表：左に時間とその内訳、右に料金。線の行の上下は16 ---------- */
-/* 単位：表の右上に1か所だけ「税込・円」（総額表示）。料金の数字には「¥」も「税込」も付けない */
+/* ---------- 料金表：時間 →（内訳）→ 料金。料金は最後の段の右端。線の行の上下は16 ---------- */
+/* 単位：表の右上に1か所だけ「税込」（総額表示）。料金の数字には半角の「¥」を付ける */
 .unit { margin-top: var(--gap-section); margin-bottom: var(--gap-item); text-align: right; font-size: var(--fs-sm); line-height: var(--lh-ui); color: var(--soft); }
-h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ */
 .prices { list-style: none; border-top: var(--bw) solid var(--ink-12); }
-.prices li { display: grid; grid-template-columns: 1fr auto; gap: 0 var(--gap-head); align-items: center; padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
-.prices .t { display: grid; gap: var(--gap-tight); line-height: var(--lh-ui); }
-.prices .t small { font-size: var(--fs-sm); color: var(--soft); }
+.prices li { display: grid; grid-template-columns: 1fr auto; gap: var(--gap-tight) var(--gap-head); align-items: baseline; padding: var(--gap-head) 0; border-bottom: var(--bw) solid var(--ink-12); }
+.prices .t { line-height: var(--lh-ui); }
+.prices .t small { display: block; margin-top: var(--gap-tight); font-size: var(--fs-sm); color: var(--soft); }   /* 内訳は時間の下に */
+/* 内訳のある行は3段：時間 → 内訳（幅いっぱい）→ 料金（右端）。料金はいつも行の最後の段の右端 */
+.prices li:has(small) .t { grid-column: 1 / -1; }
+.prices li:has(small) b { grid-row: 2; grid-column: 2; }
+.prices small span + span { margin-left: var(--gap-item); padding-left: var(--gap-item); border-left: var(--bw) solid var(--ink-12); }   /* 組み合わせの区切り：画面下のメニューと同じ細い縦線 */
 .prices b { font-size: var(--fs-lg); line-height: var(--lh-none); font-weight: var(--fw-regular); font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* ===== このページだけここまで ===== */
 </style>
@@ -310,55 +316,55 @@ h2 + .unit { margin-top: 0; }   /* 見出しの直後は見出しの余白だけ
       <div class="ph"><img src="../assets/img/course-body.webp" alt="もみほぐしの様子。服の上から背中をほぐす" width="960" height="560" decoding="async"></div>
       <h2 class="name">ボディコース<small>もみほぐし</small></h2>
       <p>肩や首、腰、背中、脚など、気になるところを中心に丁寧にもみほぐすコースです。力加減は、お好みに合わせて調整します。ほぐす範囲は、60分で半身、90分からは全身が目安です。</p>
-      <p class="unit">税込・円</p>
+      <p class="unit">税込</p>
       <ul class="prices">
-          <li><span class="t">30分</span><b>2,000</b></li>
-          <li><span class="t">60分</span><b>3,900</b></li>
-          <li><span class="t">90分</span><b>5,800</b></li>
-          <li><span class="t">120分</span><b>7,700</b></li>
+          <li><span class="t">30分</span><b>¥2,000</b></li>
+          <li><span class="t">60分</span><b>¥3,900</b></li>
+          <li><span class="t">90分</span><b>¥5,800</b></li>
+          <li><span class="t">120分</span><b>¥7,700</b></li>
       </ul>
     </article>
     <article class="course" id="head">
       <div class="ph"><img src="../assets/img/course-head.webp" alt="ドライヘッドスパの様子。あお向けで頭をほぐす" width="960" height="560" loading="lazy" decoding="async"></div>
       <h2 class="name">ヘッドコース<small>ドライヘッドスパ</small></h2>
       <p>オイルを使わずに、頭から首、胸元をほぐすコースです。お好みで、お顔もほぐします。頭まわりをじっくりケアしたい方や、ゆっくりリラックスしたい方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
-      <p class="unit">税込・円</p>
+      <p class="unit">税込</p>
       <ul class="prices">
-          <li><span class="t">30分<small>ドライヘッドスパのみ</small></span><b>2,800</b></li>
-          <li><span class="t">60分<small>ドライヘッドスパ15分、もみほぐし45分</small></span><b>4,300</b></li>
-          <li><span class="t">90分<small>ドライヘッドスパ15分、もみほぐし75分</small></span><b>6,200</b></li>
-          <li><span class="t">120分<small>ドライヘッドスパ15分、もみほぐし105分</small></span><b>8,100</b></li>
+          <li><span class="t">30分<small>ドライヘッドスパのみ</small></span><b>¥2,800</b></li>
+          <li><span class="t">60分<small><span>ドライヘッドスパ15分</span><span>もみほぐし45分</span></small></span><b>¥4,300</b></li>
+          <li><span class="t">90分<small><span>ドライヘッドスパ15分</span><span>もみほぐし75分</span></small></span><b>¥6,200</b></li>
+          <li><span class="t">120分<small><span>ドライヘッドスパ15分</span><span>もみほぐし105分</span></small></span><b>¥8,100</b></li>
       </ul>
     </article>
     <article class="course" id="foot">
       <div class="ph"><img src="../assets/img/course-foot.webp" alt="足つぼ・リフレクソロジーの様子。オイルで足をほぐす" width="960" height="560" loading="lazy" decoding="async"></div>
       <h2 class="name">フットコース<small>足つぼ・リフレクソロジー</small></h2>
       <p>足裏を中心に、オイルを使ってほぐすコースです。立ち仕事や歩くことが多い方、足の疲れやだるさが気になる方におすすめです。60分からは、もみほぐしも組み合わせます。</p>
-      <p class="unit">税込・円</p>
+      <p class="unit">税込</p>
       <ul class="prices">
-          <li><span class="t">30分<small>足つぼ・リフレクソロジーのみ</small></span><b>3,000</b></li>
-          <li><span class="t">60分<small>足つぼ・リフレクソロジー30分、もみほぐし30分</small></span><b>4,900</b></li>
-          <li><span class="t">90分<small>足つぼ・リフレクソロジー30分、もみほぐし60分</small></span><b>6,800</b></li>
-          <li><span class="t">120分<small>足つぼ・リフレクソロジー30分、もみほぐし90分</small></span><b>8,700</b></li>
+          <li><span class="t">30分<small>足つぼ・リフレクソロジーのみ</small></span><b>¥3,000</b></li>
+          <li><span class="t">60分<small><span>足つぼ・リフレクソロジー30分</span><span>もみほぐし30分</span></small></span><b>¥4,900</b></li>
+          <li><span class="t">90分<small><span>足つぼ・リフレクソロジー30分</span><span>もみほぐし60分</span></small></span><b>¥6,800</b></li>
+          <li><span class="t">120分<small><span>足つぼ・リフレクソロジー30分</span><span>もみほぐし90分</span></small></span><b>¥8,700</b></li>
       </ul>
     </article>
     <article class="course" id="full">
       <div class="ph"><img src="../assets/img/course-foot.webp" alt="足つぼ・リフレクソロジーの様子" width="960" height="560" loading="lazy" decoding="async"><img src="../assets/img/course-head.webp" alt="ドライヘッドスパの様子" width="960" height="560" loading="lazy" decoding="async"><img src="../assets/img/course-body.webp" alt="もみほぐしの様子" width="960" height="560" loading="lazy" decoding="async"></div>
       <h2 class="name">フルコース<small>3つの組み合わせ</small></h2>
       <p>足つぼ・リフレクソロジー、ドライヘッドスパ、もみほぐしの3つを組み合わせたコースです。90分から、頭から足まで全身をじっくりケアします。ゆったりとした時間をお過ごしください。</p>
-      <p class="unit">税込・円</p>
+      <p class="unit">税込</p>
       <ul class="prices">
-          <li><span class="t">90分<small>足つぼ・リフレクソロジー30分、ドライヘッドスパ15分、もみほぐし45分</small></span><b>7,200</b></li>
-          <li><span class="t">120分<small>足つぼ・リフレクソロジー30分、ドライヘッドスパ15分、もみほぐし75分</small></span><b>9,100</b></li>
+          <li><span class="t">90分<small><span>足つぼ・リフレクソロジー30分</span><span>ドライヘッドスパ15分</span><span>もみほぐし45分</span></small></span><b>¥7,200</b></li>
+          <li><span class="t">120分<small><span>足つぼ・リフレクソロジー30分</span><span>ドライヘッドスパ15分</span><span>もみほぐし75分</span></small></span><b>¥9,100</b></li>
       </ul>
     </article>
   </div>
 
   <section class="sec" id="request">
     <h2 class="name">リクエスト料<small>ご指定</small></h2>
-    <p class="unit">税込・円</p>
+    <p class="unit">税込</p>
     <ul class="prices">
-      <li><span class="t">担当者・性別<small>担当者を直接ご指名いただくか、性別でご指定いただけます</small></span><b>400</b></li>
+      <li><span class="t">担当者・性別<small>担当者を直接ご指名いただくか、性別でご指定いただけます</small></span><b>¥400</b></li>
     </ul>
   </section>
 
