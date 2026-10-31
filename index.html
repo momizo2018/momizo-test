@@ -30,8 +30,8 @@
 
    規則
    1. 間隔は 4・8・12・16・24・32・48・64・96。関係が近いものほど狭く、となりの役割とは1段以上の差をつける
-   2. 文字は 12・14・20（例外：ヘッダーのロゴ 28、求人の「65%」64）。太さは 400 が基本。600 は小見出し・ボタンだけ
-      行間は 1・1.4・1.8。字間は基本 .04em
+   2. 文字は 14・16・20。本文は16（例外：ヘッダーのロゴ 約33.3、求人の「65%」72）。太さは 400 が基本。600 は小見出し・ボタンだけ
+      行間は 1・1.4・1.8。字間は指定せず、書体のまま
    3. 文と見出しは日本語。英語はロゴ（momizo と relaxation salon）と著作権表示だけ
    4. 写真の枠は高さ280で固定して横にスクロール。地図は 3:2
    5. 画面幅で値が変わるのは 480px 以下の1か所だけ
@@ -82,14 +82,13 @@
   --font-sans: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
   --font-latin: "Inter", sans-serif;
   --fw-regular: 400; --fw-semibold: 600;
-  --fs-sm: 12px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
-  --fs-md: 14px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
-  --fs-lg: 20px;     /* フッターのロゴ、セクション見出し、コース名、料金 */
-  --fs-logo: 28px;   /* 固有値：ヘッダーのロゴ。下のリンクの行に埋もれないよう、ここだけ大きく */
+  --fs-sm: 14px;     /* 補足・注意書き、営業状況、ナビ、フッターのリンク、著作権表示、コースの施術名、表の単位 */
+  --fs-md: 16px;     /* 本文、表、特徴の一覧、小見出し、ボタン */
+  --fs-lg: 20px;     /* セクション見出し、コース名、料金 */
+  --fs-logo: calc(var(--fs-lg) / .6);   /* ヘッダーのロゴ（momizo）：relaxation salon を見出しと同じ20pxにそろえた逆算（20÷0.6≒33.3） */
   --lh-none: 1;      /* 1行の部品 */
   --lh-ui: 1.4;      /* 見出し、ボタン */
   --lh-text: 1.8;    /* 文章 */
-  --ls-latin: -.04em; --ls-base: .04em;
 
   /* 動き */
   --dur-press: .1s; --dur-base: .2s; --dur-enter: .8s;
@@ -111,7 +110,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--paper); min-height: 100%; }
 body {
-  font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text); letter-spacing: var(--ls-base);
+  font-family: var(--font-sans); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-text);
   color: var(--ink-2); background: var(--bg-page);
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden;
   min-height: 100svh; display: grid; place-items: start center;
@@ -135,23 +134,28 @@ section[id], article[id] { scroll-margin-top: var(--page-group); }
 }
 @keyframes enter { from { opacity: 0; transform: translateY(var(--enter-y)) scale(.99); } to { opacity: 1; transform: none; } }
 
-/* ---------- ヘッダー：ロゴ（左）と営業状況（右）→ ページの行 → 区切り線 → そのページのナビ ---------- */
-/* 営業状況はロゴの下の行（relaxation salon）の文字の下の線にそろえる */
-.head .wrap { display: flex; align-items: flex-end; align-items: last baseline; justify-content: space-between; gap: var(--gap-head); }
+/* ---------- ヘッダー：営業状況（右上に1行）→ ロゴ → ページの行 → 区切り線 → そのページのナビ ---------- */
+/* 営業状況はロゴと別の行に置くので、どの幅でもロゴとぶつからない */
+.head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
 .head .brand { font-size: var(--fs-logo); }
 /* ページの行：ロゴとの間は48あけて、ロゴを独立させる。区切り線の上が「サイトのページ」、下が「このページの中」 */
 .head-pages { margin-top: var(--sp-12); padding-bottom: var(--gap-head); border-bottom: var(--bw) solid var(--ink-12); }
 
-/* ロゴ：momizo（400・-.04em・ink-2）の下に relaxation salon（soft）。間0。
-   1つの塊として大きさを変え、relaxation salon は momizo の0.6倍（フッター20→12、ヘッダー28→16.8） */
-.brand { display: grid; font-size: var(--fs-lg); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
-.brand-name { font-size: 1em; line-height: var(--lh-ui); letter-spacing: var(--ls-latin); color: var(--ink-2); }
+/* ロゴ：momizo（400・ink-2）の下に relaxation salon（soft）。間0。
+   1つの塊として大きさを変え、relaxation salon は momizo の0.6倍。
+   フッターは relaxation salon を小さい文字と同じ14pxにそろえ、momizo はその逆算（14÷0.6≒23.3）。ヘッダーは relaxation salon を20pxにそろえ、momizo はその逆算（20÷0.6≒33.3） */
+.brand { display: grid; font-size: calc(var(--fs-sm) / .6); color: inherit; text-decoration: none; transition: opacity var(--dur-base) var(--ease-out); }
+.brand-name { font-size: 1em; line-height: var(--lh-ui); color: var(--ink-2); }
 .brand-sub { font-size: .6em; line-height: var(--lh-ui); color: var(--soft); white-space: nowrap; }
 
-/* 営業状況：2段。上に点＋いまの状態（ink-2）、下に閉まる時刻か次に開く日時（soft）。右寄せで、間0（ロゴの2段と同じ）。
-   スクリプトが中身を入れてから出す */
-.status { display: none; justify-items: end; font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); }
-.status.on { display: grid; }
+/* 営業状況：ヘッダーのいちばん上、右端に1行。点＋いまの状態（ink-2）と、閉まる時刻か次に開く日時（soft）。
+   →8→ ロゴ。中身はスクリプトが入れてから見せる（行の高さは先に取っておき、出たときにロゴが動かないようにする） */
+.status {
+  order: -1; justify-self: end; margin-bottom: var(--gap-item);
+  display: flex; align-items: baseline; gap: var(--gap-item); min-height: calc(var(--fs-sm) * var(--lh-ui));
+  font-size: var(--fs-sm); line-height: var(--lh-ui); white-space: nowrap; color: var(--soft); visibility: hidden;
+}
+.status.on { visibility: visible; }
 .status b { display: flex; align-items: center; gap: var(--gap-item); font-weight: inherit; color: var(--ink-2); }
 .status b::before { content: ""; width: var(--sp-2); height: var(--sp-2); border-radius: 50%; background: var(--faint); }
 .status.open b::before { background: var(--accent); box-shadow: 0 0 0 var(--sp-1) var(--accent-16); }
@@ -543,13 +547,13 @@ const jstNow = () => new Date(new Date().toLocaleString("en-US", { timeZone: "As
     const h = H[d];
     let state, detail;
     if (h && now >= h[0] && now < h[1]) {
-      state = "営業中"; detail = t(h[1]) + "まで"; el.classList.add("open");
+      state = "現在営業中"; detail = t(h[1]) + "まで"; el.classList.add("open");
     } else if (h && now < h[0]) {
-      state = "準備中"; detail = t(h[0]) + "から";
+      state = "開店前"; detail = "本日 " + t(h[0]) + "から";
     } else {
       let n = 1; while (!H[(d + n) % 7]) n++;
       const next = (d + n) % 7;
-      state = h ? "営業時間外" : "定休日";
+      state = h ? "営業終了" : "定休日";
       detail = (n === 1 ? "明日" : DAY[next] + "曜") + " " + t(H[next][0]) + "から";
     }
     const b = document.createElement("b"); b.textContent = state;
